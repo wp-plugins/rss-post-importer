@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Rss Post Importer v1.0\n"
+"Project-Id-Version: Rss Post Importer v1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-09-09 11:08:26+0000\n"
+"PO-Revision-Date: 2013-09-09 11:28:50+0000\n"
 "Last-Translator: admin <jens@simmalugnt.se>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -52,11 +52,6 @@ msgstr "Puestos / importación Máx"
 #: rss_pi-ui.php:28
 #@ default
 msgid "Category"
-msgstr ""
-
-#: parts/table_row.php:59
-#@ default
-msgid "Stip html tags"
 msgstr ""
 
 #: parts/table_row.php:63
@@ -155,4 +150,9 @@ msgstr ""
 #@ default
 msgid "new posts imported."
 msgstr ""
+
+#: parts/table_row.php:59
+#@ rss_pi
+msgid "Strip html tags"
+msgstr "Strip etiquetas HTML"
 
