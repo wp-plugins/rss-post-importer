@@ -60,17 +60,17 @@
 				<td>
 					<ul class="radiolist">
 						<li>
-							<label><input type="radio" id="<?php echo($f['id']); ?>-strip_html" name="<?php echo($f['id']); ?>-strip_html" value="true" <?php echo($f['strip_html'] == 'true' ? 'checked="checked"' : ''); ?> /> Yes</label>
+							<label><input type="radio" id="<?php echo($f['id']); ?>-strip_html" name="<?php echo($f['id']); ?>-strip_html" value="true" <?php echo($f['strip_html'] == 'true' ? 'checked="checked"' : ''); ?> /> <?php _e('Yes'); ?></label>
 						</li>
 						<li>
-							<label><input type="radio" id="<?php echo($f['id']); ?>-strip_html" name="<?php echo($f['id']); ?>-strip_html" value="false" <?php echo($f['strip_html'] == 'false' ? 'checked="checked"' : ''); ?> /> No</label>
+							<label><input type="radio" id="<?php echo($f['id']); ?>-strip_html" name="<?php echo($f['id']); ?>-strip_html" value="false" <?php echo($f['strip_html'] == 'false' ? 'checked="checked"' : ''); ?> /> <? _e('No'); ?></label>
 						</li>
 					</ul>
 				</td>
 			</tr>
 			<tr>
 				<td><input type="hidden" name="id" value="<?php echo($f['id']); ?>" /></td>
-				<td><a id="close-edit-table" class="button button-large toggle-edit" data-target="<?php echo ($f['id']); ?>">Stäng</a></td>
+				<td><a id="close-edit-table" class="button button-large toggle-edit" data-target="<?php echo ($f['id']); ?>"><?php _e('Close'); ?></a></td>
 			</tr>
 		</table>
 		
