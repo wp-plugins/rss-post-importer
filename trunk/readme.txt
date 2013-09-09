@@ -1,5 +1,6 @@
 ﻿=== Rss Post Importer ===
 Contributors: jenswaern
+Donate link: https://inspirepay.com/pay/simmalugnt
 Tags: rss, feeds, import, feed, autoblog, feed aggregation, rss-feed
 Requires at least: 3.5
 Tested up to: 3.6
