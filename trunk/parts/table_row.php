@@ -56,7 +56,7 @@
 				<td><?php wp_dropdown_categories( array('hide_empty' => 0, 'name' => 'select_name', 'hierarchical' => true, 'id' => $f['id'] . '-category_id', 'name' => $f['id'] . '-category_id', 'selected' => $f['category_id'] )); ?></td>
 			</tr>
 			<tr>
-				<td><label for=""><?php _e("Stip html tags"); ?></label></td>
+				<td><label for=""><?php _e("Strip html tags", 'rss_pi'); ?></label></td>
 				<td>
 					<ul class="radiolist">
 						<li>

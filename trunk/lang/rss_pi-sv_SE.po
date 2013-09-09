@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Rss Post Importer v1.0\n"
+"Project-Id-Version: Rss Post Importer v1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-09-02 09:45:29+0000\n"
+"PO-Revision-Date: 2013-09-09 11:28:16+0000\n"
 "Last-Translator: admin <jens@simmalugnt.se>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -52,11 +52,6 @@ msgstr "Max poster / import"
 #: rss_pi-ui.php:28
 #@ default
 msgid "Category"
-msgstr ""
-
-#: parts/table_row.php:59
-#@ default
-msgid "Stip html tags"
 msgstr ""
 
 #: rss_pi-ui.php:2
@@ -114,23 +109,12 @@ msgstr ""
 msgid "Allow comments"
 msgstr "Tillåt kommentarer"
 
-#: rss_pi-ui.php:175
-#@ my-text-domain
-msgid "No items"
-msgstr ""
-
-#: rss_pi-ui.php:180
-#, php-format
-#@ my-text-domain
-msgid "Posted %s"
-msgstr ""
-
-#: rss_pi.php:98
+#: rss_pi.php:95
 #@ default
 msgid "Settings saved."
 msgstr ""
 
-#: rss_pi.php:106
+#: rss_pi.php:103
 #@ default
 msgid "new posts imported."
 msgstr ""
@@ -150,13 +134,25 @@ msgstr "Så här kommer innehållet formatteras."
 msgid "Available tags:"
 msgstr "Tillgängliga taggar:"
 
+#: parts/table_row.php:63
 #: rss_pi-ui.php:138
 #@ default
 msgid "Yes"
 msgstr ""
 
+#: parts/table_row.php:66
 #: rss_pi-ui.php:141
 #@ default
 msgid "No"
+msgstr ""
+
+#: parts/table_row.php:59
+#@ rss_pi
+msgid "Strip html tags"
+msgstr "Ta bort html-taggar"
+
+#: parts/table_row.php:73
+#@ default
+msgid "Close"
 msgstr ""
 
