@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Rss Post Importer v1.0.2\n"
+"Project-Id-Version: Rss Post Importer v1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-09-11 09:26:25+0000\n"
+"PO-Revision-Date: 2013-09-09 11:28:16+0000\n"
 "Last-Translator: admin <jens@simmalugnt.se>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -109,12 +109,12 @@ msgstr ""
 msgid "Allow comments"
 msgstr "Tillåt kommentarer"
 
-#: rss_pi.php:98
+#: rss_pi.php:95
 #@ default
 msgid "Settings saved."
 msgstr ""
 
-#: rss_pi.php:106
+#: rss_pi.php:103
 #@ default
 msgid "new posts imported."
 msgstr ""
@@ -136,14 +136,12 @@ msgstr "Tillgängliga taggar:"
 
 #: parts/table_row.php:63
 #: rss_pi-ui.php:138
-#: rss_pi-ui.php:154
 #@ default
 msgid "Yes"
 msgstr ""
 
 #: parts/table_row.php:66
 #: rss_pi-ui.php:141
-#: rss_pi-ui.php:157
 #@ default
 msgid "No"
 msgstr ""
@@ -157,15 +155,4 @@ msgstr "Ta bort html-taggar"
 #@ default
 msgid "Close"
 msgstr ""
-
-#: rss_pi-ui.php:148
-#@ rss_pi
-msgid "Enable logging?"
-msgstr "Aktivera loggen?"
-
-#: rss_pi-ui.php:149
-#, php-format
-#@ rss_pi
-msgid "The logfile can be found <a href=\"%s\">here</a>."
-msgstr "Du hittar loggfilen <a href=\"%s\">här</a>."
 

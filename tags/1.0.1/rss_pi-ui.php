@@ -100,7 +100,7 @@
 														</td>
 													</tr>
 													<tr>
-														<td><label for="post_status"><?php _e('Post status', "rss_pi"); ?></label></td>
+														<td><?php _e('Post status', "rss_pi"); ?></td>
 														<td>
 														
 															<select name="post_status" id="post_status">
@@ -139,22 +139,6 @@
 																</li>
 																<li>
 																	<label><input type="radio" id="allow_comments" name="allow_comments" value="false" <?php echo($options['settings']['allow_comments'] == 'false' ? 'checked="checked"' : ''); ?> /> <?php _e('No'); ?></label>
-																</li>
-															</ul>
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<?php _e('Enable logging?', "rss_pi"); ?>
-															<p class="description"><?php printf( __('The logfile can be found <a href="%s">here</a>.', "rss_pi"), $this->settings['dir'] . 'log.txt' ); ?></p>
-														</td>
-														<td>
-															<ul class="radiolist">
-																<li>
-																	<label><input type="radio" id="enable_logging" name="enable_logging" value="true" <?php echo($options['settings']['enable_logging'] == 'true' ? 'checked="checked"' : ''); ?> /> <?php _e('Yes'); ?></label>
-																</li>
-																<li>
-																	<label><input type="radio" id="enable_logging" name="enable_logging" value="false" <?php echo($options['settings']['enable_logging'] == 'false' || $options['settings']['enable_logging'] == '' ? 'checked="checked"' : ''); ?> /> <?php _e('No'); ?></label>
 																</li>
 															</ul>
 														</td>
