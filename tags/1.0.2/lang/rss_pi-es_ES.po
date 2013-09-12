@@ -1,0 +1,158 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Rss Post Importer v1.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-09-09 11:28:50+0000\n"
+"Last-Translator: admin <jens@simmalugnt.se>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: SPAIN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: parts/table_row.php:26
+#@ default
+msgid "Edit"
+msgstr ""
+
+#: parts/table_row.php:27
+#@ default
+msgid "Delete"
+msgstr ""
+
+#: parts/table_row.php:38
+#: rss_pi-ui.php:25
+#@ rss_pi
+msgid "Feed name"
+msgstr ""
+
+#: parts/table_row.php:45
+#: rss_pi-ui.php:26
+#@ rss_pi
+msgid "Feed url"
+msgstr ""
+
+#: parts/table_row.php:51
+#: rss_pi-ui.php:27
+#@ rss_pi
+msgid "Max posts / import"
+msgstr "Puestos / importación Máx"
+
+#: parts/table_row.php:55
+#: rss_pi-ui.php:28
+#@ default
+msgid "Category"
+msgstr ""
+
+#: parts/table_row.php:63
+#: rss_pi-ui.php:138
+#@ default
+msgid "Yes"
+msgstr ""
+
+#: parts/table_row.php:66
+#: rss_pi-ui.php:141
+#@ default
+msgid "No"
+msgstr ""
+
+#: parts/table_row.php:73
+#@ default
+msgid "Close"
+msgstr ""
+
+#: rss_pi-ui.php:2
+#@ rss_pi
+msgid "Rss import settings"
+msgstr "Ajustes de importación rss"
+
+#: rss_pi-ui.php:15
+#@ default
+msgid "Save"
+msgstr ""
+
+#: rss_pi-ui.php:16
+#@ rss_pi
+msgid "Save and import"
+msgstr "Guardar e importar"
+
+#: rss_pi-ui.php:43
+#@ rss_pi
+msgid "You haven't specified any feeds to import yet, why don't you <a href=\"#\" class=\"add-row\">add one now</a>?"
+msgstr "Usted no se ha especificado ninguna fuente para importar, sin embargo, ¿por qué no <a href=\"#\" class=\"add-row\"> agrega uno ahora </ a>?"
+
+#: rss_pi-ui.php:53
+#@ rss_pi
+msgid "Add new feed"
+msgstr "Añadir nuevo"
+
+#: rss_pi-ui.php:65
+#@ default
+msgid "Settings"
+msgstr ""
+
+#: rss_pi-ui.php:74
+#@ rss_pi
+msgid "Frequency"
+msgstr "Frecuencia"
+
+#: rss_pi-ui.php:75
+#@ rss_pi
+msgid "How often will the import run."
+msgstr "¿Con qué frecuencia se ejecutará la importación."
+
+#: rss_pi-ui.php:88
+#@ default
+msgid "Template"
+msgstr ""
+
+#: rss_pi-ui.php:89
+#@ rss_pi
+msgid "This is how the post will be formatted."
+msgstr "Así es como se formatea el mensaje."
+
+#: rss_pi-ui.php:91
+#@ rss_pi
+msgid "Available tags:"
+msgstr "Etiquetas disponibles:"
+
+#: rss_pi-ui.php:103
+#@ rss_pi
+msgid "Post status"
+msgstr "Publique estado"
+
+#: rss_pi-ui.php:121
+#@ default
+msgid "Author"
+msgstr ""
+
+#: rss_pi-ui.php:134
+#@ rss_pi
+msgid "Allow comments"
+msgstr "Permitir comentarios"
+
+#: rss_pi.php:95
+#@ default
+msgid "Settings saved."
+msgstr ""
+
+#: rss_pi.php:103
+#@ default
+msgid "new posts imported."
+msgstr ""
+
+#: parts/table_row.php:59
+#@ rss_pi
+msgid "Strip html tags"
+msgstr "Strip etiquetas HTML"
+
