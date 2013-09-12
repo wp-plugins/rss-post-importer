@@ -4,14 +4,15 @@ Plugin Name: Rss Post Importer
 Plugin URI: -
 Description: This plugin lets you set up an import posts from one or several rss-feeds and save them as posts on your site, simple and flexible.
 Author: Jens Waern
-Version: 1.0.2
+Version: 1.0.3
 Author URI: http://www.simmalugnt.se
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-
 add_action('wp_ajax_rss_pi_add_row', 'rss_pi_add_row');
+add_action('wp_ajax_rss_pi_load_log', 'rss_pi_load_log');
+add_action('wp_ajax_rss_pi_clear_log', 'rss_pi_clear_log');
 
 function rss_pi_add_row()
 {
@@ -19,20 +20,44 @@ function rss_pi_add_row()
 	exit;
 }
 
+function rss_pi_load_log()
+{
+	$log = file_get_contents(plugin_dir_path( __FILE__ ) . 'log.txt');
+	include( plugin_dir_path( __FILE__ ) . 'parts/rss_pi-log.php');
+
+	exit;
+}
+
+function rss_pi_clear_log()
+{
+	$log_file = plugin_dir_path( __FILE__ ) . 'log.txt';
+	
+	file_put_contents($log_file, '');
+	?>
+	<div id="message" class="updated">
+	    <p><strong><?php _e('Log has been cleared.', "rss_pi"); ?></strong></p>
+	</div>
+	<?php
+	
+	exit;
+}
+
+
 class rss_pi {
 
 	function __construct() {
 		add_action('admin_menu', array(&$this, 'admin_menu'));
+		//add_submenu_page( 'tools.php', 'My Custom Submenu Page', 'My Custom Submenu Page', 'manage_options', 'my-custom-submenu-page', 'my_custom_submenu_page_callback' ); 
+		//add_submenu_page( null, 'Rss Post Importer Log', '', 'manage_options', 'rss_pi-log', array(&$this, 'log_page') );
 		
 		$this->settings = array(
-			'version'	=>	'1.0.2',
+			'version'	=>	'1.0.3',
 			'dir'		=>	plugin_dir_path( __FILE__ )
 		);
 
-		load_textdomain('rss_pi', $this->settings['dir'] . 'lang/rss_pi-' . get_locale() . '.mo');	
+		load_textdomain('rss_pi', $this->settings['dir'] . 'lang/rss_pi-' . get_locale() . '.mo');
 	}
-	
-	
+
 	// On an early action hook, check if the hook is scheduled - if not, schedule it.
 	function rss_pi_setup_schedule() {
 		if ( ! wp_next_scheduled( 'rss_pi_cron' ) ) {
@@ -52,6 +77,14 @@ class rss_pi {
 	}
 	
 	function settings_page () {
+		if(isset($_GET['show']))
+		{
+			$do = $_GET['show'];
+			if($do == 'log')
+			{
+				die($this->log_page());
+			}
+		}
 		// Changes submitted, correct nonce
 		if( isset($_POST['info_update']) && wp_verify_nonce($_POST['rss_pi_nonce'],'settings_page')) : 
 			
@@ -91,7 +124,9 @@ class rss_pi {
 				}
 			}
 
-			update_option('rss_pi_feeds', array('feeds' => $feeds, 'settings' => $settings, 'latest_import' => ''));
+			$options = $this->rss_pi_get_option();
+
+			update_option('rss_pi_feeds', array('feeds' => $feeds, 'settings' => $settings, 'latest_import' => $options['latest_import'], 'imports' => $options['imports']));
 			
 			?>
 			<div id="message" class="updated">
@@ -116,9 +151,8 @@ class rss_pi {
 		
 		$this->input_admin_enqueue_scripts();
 		
-		include( plugin_dir_path( __FILE__ ) . 'rss_pi-ui.php');
+		include( $this->settings['dir'] . 'rss_pi-ui.php');
 	}
-	
 	
 	function import_feed($url, $feed_title, $max_posts, $category_id, $strip_html, $save_to_db)
 	{
@@ -165,14 +199,8 @@ class rss_pi {
 						
 						array_push($saved_posts, $new_post);
 						
-						//$log .= date("Y-m-d H:i:s") . "\t Imported '" . $item->get_title() . "' from " . $feed_title . "\n";
 					}
 				}
-				//if($options['settings']['enable_logging'] == 'true')
-				//{
-				//	$log_file = $this->settings['dir'] . 'log.txt';
-				//	file_put_contents($log_file, $log, FILE_APPEND);
-				//}
 				
 				return $saved_posts;
 				exit;
@@ -201,18 +229,20 @@ class rss_pi {
 			$rss_items = $this->import_feed($f['url'], $f['name'], $f['max_posts'], $f['category_id'], $f['strip_html'], true);
 			$post_count += count($rss_items);
 		}
+		$imports = intval($options['imports']) + $post_count;
 		
 		update_option('rss_pi_feeds', array(
 			'feeds' => $options['feeds'],
 			'settings' => $options['settings'],
-			'latest_import' => date("Y-m-d H:i:s")
+			'latest_import' => date("Y-m-d H:i:s"),
+			'imports' => $imports
 		));
 		
 		remove_filter( 'wp_feed_cache_transient_lifetime', array(&$this, 'return_frequency' ) );
 		
 		if($options['settings']['enable_logging'] == 'true')
 		{
-			$log .= date("Y-m-d H:i:s") . "\t Imported " . $post_count . " new posts. \n";
+			$log = date("Y-m-d H:i:s") . "\t Imported " . $post_count . " new posts. \n";
 			$log_file = $this->settings['dir'] . 'log.txt';
 			file_put_contents($log_file, $log, FILE_APPEND);
 		}
@@ -280,6 +310,10 @@ class rss_pi {
 		if(!array_key_exists('enable_logging', $options['settings']))
 		{
 			$options['settings']['enable_logging'] = 'false';
+		}
+		if(!array_key_exists('imports', $options))
+		{
+			$options['imports'] = 0;
 		}
 		
 		return $options;

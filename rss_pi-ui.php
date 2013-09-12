@@ -1,6 +1,7 @@
 		<div class="wrap">
-			<h2><?php _e("Rss import settings", 'rss_pi'); ?></h2>
-			<form method="post">
+			<div id="main_ui">
+				<h2><?php _e("Rss Post Importer Settings", 'rss_pi'); ?></h2>
+				<form method="post" id="">
 				<input type="hidden" name="save_to_db" id="save_to_db" />
 				<?php wp_nonce_field('settings_page','rss_pi_nonce'); ?>
 				<div id="poststuff">
@@ -9,7 +10,13 @@
 							<div class="postbox">
 								<div class="inside">
 									<div class="misc-pub-section">
-										Latest import: <strong><?php echo($options['latest_import']); ?></strong>
+										<h3 class="version">V. <?php echo ($this->settings['version']); ?></h3>
+										<ul>
+											<li>
+												<i class="icon-calendar"></i> <?php _e("Latest import:", 'rss_pi'); ?> <strong><?php echo($options['latest_import']); ?></strong>
+											</li>
+											<li><i class="icon-eye-open"></i> <a href="#" class="load-log"><?php _e("View the log", 'rss_pi'); ?></a></li>
+										</ul>
 									</div>
 									<div id="major-publishing-actions">
 										<input class="button button-primary button-large right" type="submit" name="info_update" value="<?php _e('Save'); ?>" />
@@ -17,6 +24,17 @@
 									</div>
 								</div>
 							</div>
+							<?php if($options['imports'] > 10) : ?>
+							<div class="rate-box">
+								<h4><?php printf(__('%d posts imported and counting!', "rss_pi"), $options['imports']); ?></h4>
+								<i class="icon-star"></i>
+								<i class="icon-star"></i>
+								<i class="icon-star"></i>
+								<i class="icon-star"></i>
+								<i class="icon-star"></i>
+								<p class="description"><a href="http://wordpress.org/plugins/rss-post-importer/" target="_blank">Please support this plugin by rating it!</a></p>
+							</div>
+							<?php endif; ?>
 						</div>
 						<div id="postbox-container-2" class="postbox-container">
 							<table class="widefat rss_pi-table" id="rss_pi-table">
@@ -146,7 +164,7 @@
 													<tr>
 														<td>
 															<?php _e('Enable logging?', "rss_pi"); ?>
-															<p class="description"><?php printf( __('The logfile can be found <a href="%s">here</a>.', "rss_pi"), $this->settings['dir'] . 'log.txt' ); ?></p>
+															<p class="description"><?php _e('The logfile can be found <a href="#" class="load-log">here</a>.', "rss_pi"); ?></p>
 														</td>
 														<td>
 															<ul class="radiolist">
@@ -169,4 +187,6 @@
 						<br class="clear" />
 				</div>
 			</form>
+			</div>
+			<div class="ajax_content"></div>
 		</div>
