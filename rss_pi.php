@@ -4,7 +4,7 @@ Plugin Name: Rss Post Importer
 Plugin URI: -
 Description: This plugin lets you set up an import posts from one or several rss-feeds and save them as posts on your site, simple and flexible.
 Author: Jens Waern
-Version: 1.0.1
+Version: 1.0.2
 Author URI: http://www.simmalugnt.se
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,7 +25,7 @@ class rss_pi {
 		add_action('admin_menu', array(&$this, 'admin_menu'));
 		
 		$this->settings = array(
-			'version'	=>	'1.0',
+			'version'	=>	'1.0.2',
 			'dir'		=>	plugin_dir_path( __FILE__ )
 		);
 
@@ -66,9 +66,12 @@ class rss_pi {
 				'post_template' => stripslashes_deep($_POST['post_template']),
 				'post_status' => $_POST['post_status'],
 				'author_id' => $_POST['author_id'],
-				'allow_comments' => $_POST['allow_comments']
+				'allow_comments' => $_POST['allow_comments'],
+				'enable_logging' => $_POST['enable_logging']
 			);
-					
+			
+			
+				
 			// Reset cron
 			wp_clear_scheduled_hook( 'rss_pi_cron' );
 			wp_schedule_event( time(), $settings['frequency'], 'rss_pi_cron');
@@ -106,8 +109,8 @@ class rss_pi {
 			endif;
 		endif;
 		
-		$options = get_option('rss_pi_feeds');
-		
+		$options = $this->rss_pi_get_option();
+				
 		$ids = array();
 		
 		
@@ -124,7 +127,7 @@ class rss_pi {
 		// Get a SimplePie feed object from the specified feed source.
 		$rss = fetch_feed( $url );
 		
-		$options = get_option('rss_pi_feeds');
+		$options = $this->rss_pi_get_option();
 		
 		// Remove the surrounding <div> from XHTML content in Atom feeds.
 		
@@ -139,6 +142,8 @@ class rss_pi {
 			if($save_to_db)
 			{
 				$saved_posts = array();
+				
+				$log = '';
 				
 				foreach ( $rss_items as $item )
 				{
@@ -159,8 +164,16 @@ class rss_pi {
 						add_post_meta( $post_id, 'rss_pi_source_url', esc_url($item->get_permalink()) );
 						
 						array_push($saved_posts, $new_post);
+						
+						//$log .= date("Y-m-d H:i:s") . "\t Imported '" . $item->get_title() . "' from " . $feed_title . "\n";
 					}
 				}
+				//if($options['settings']['enable_logging'] == 'true')
+				//{
+				//	$log_file = $this->settings['dir'] . 'log.txt';
+				//	file_put_contents($log_file, $log, FILE_APPEND);
+				//}
+				
 				return $saved_posts;
 				exit;
 			}
@@ -170,7 +183,7 @@ class rss_pi {
 	
 	function return_frequency($seconds)
 	{
-		$options = get_option('rss_pi_feeds');
+		$options = $this->rss_pi_get_option();
 		return $options['settings']['frequency'];
 	}
 	
@@ -179,7 +192,7 @@ class rss_pi {
 		
 		$post_count = 0;
 		
-		$options = get_option('rss_pi_feeds');
+		$options = $this->rss_pi_get_option();
 
 		add_filter( 'wp_feed_cache_transient_lifetime', array(&$this, 'return_frequency' ) );
 
@@ -197,12 +210,19 @@ class rss_pi {
 		
 		remove_filter( 'wp_feed_cache_transient_lifetime', array(&$this, 'return_frequency' ) );
 		
+		if($options['settings']['enable_logging'] == 'true')
+		{
+			$log .= date("Y-m-d H:i:s") . "\t Imported " . $post_count . " new posts. \n";
+			$log_file = $this->settings['dir'] . 'log.txt';
+			file_put_contents($log_file, $log, FILE_APPEND);
+		}
+		
 		return $post_count;
 	}
 	
 	function parse_content($item, $feed_title, $strip_html)
 	{
-		$options = get_option('rss_pi_feeds');
+		$options = $this->rss_pi_get_option();
 		$post_template = $options['settings']['post_template'];
 		$c = $item->get_content() != "" ? $item->get_content() : $item->get_description();
 		
@@ -222,6 +242,7 @@ class rss_pi {
 	{
 		
 		$args = array(
+			'post_status' => 'any',
 			'meta_key' => 'rss_pi_source_url',
 			'meta_value' => esc_url($permalink)
 		);
@@ -250,7 +271,19 @@ class rss_pi {
 		));
 		
 	}
-
+	
+	function rss_pi_get_option()
+	{
+		$options = get_option('rss_pi_feeds');
+		
+		// Insert new settings
+		if(!array_key_exists('enable_logging', $options['settings']))
+		{
+			$options['settings']['enable_logging'] = 'false';
+		}
+		
+		return $options;
+	}
 }
 new rss_pi;
 ?>

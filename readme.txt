@@ -15,6 +15,7 @@ This plugin lets you set up an import posts from one or several rss-feeds and sa
 This plugin is not a shortcode for just displaying displaying a bunch of links from an rss feeds, it imports data from a feed and saves it as posts.
 
 Features include:
+
 * Importing feeds automatically using cron.
 * Set number of posts and category per feed.
 * Set what author to assign imported content to.
@@ -29,3 +30,12 @@ Features include:
 == Screenshots ==
 
 1. This is the combined settings- and feed-management-screen.
+
+== Change Log ==
+
+= Version 1.0.2 =
+* Fixed bug that caused posts to be duplicated when post status was set to anything put 'Publish'.
+* Added possibility to log each time imports are made in a textfile (for debugging purposes).
+
+= Version 1.0.1 =
+* Fixed some localization issues.
