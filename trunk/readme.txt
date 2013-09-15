@@ -33,6 +33,9 @@ Features include:
 
 == Change Log ==
 
+= Version 1.0.4 =
+* Fixed bug that kept cron from running correctly.
+
 = Version 1.0.3 =
 * Made the log available through UI instead of just over ftp.
 * Design improvements.
