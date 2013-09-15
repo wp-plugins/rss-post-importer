@@ -4,7 +4,7 @@ Plugin Name: Rss Post Importer
 Plugin URI: -
 Description: This plugin lets you set up an import posts from one or several rss-feeds and save them as posts on your site, simple and flexible.
 Author: Jens Waern
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://www.simmalugnt.se
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -47,30 +47,38 @@ class rss_pi {
 
 	function __construct() {
 		add_action('admin_menu', array(&$this, 'admin_menu'));
-		//add_submenu_page( 'tools.php', 'My Custom Submenu Page', 'My Custom Submenu Page', 'manage_options', 'my-custom-submenu-page', 'my_custom_submenu_page_callback' ); 
-		//add_submenu_page( null, 'Rss Post Importer Log', '', 'manage_options', 'rss_pi-log', array(&$this, 'log_page') );
 		
 		$this->settings = array(
-			'version'	=>	'1.0.3',
+			'version'	=>	'1.0.4',
 			'dir'		=>	plugin_dir_path( __FILE__ )
 		);
 
 		load_textdomain('rss_pi', $this->settings['dir'] . 'lang/rss_pi-' . get_locale() . '.mo');
-	}
 
-	// On an early action hook, check if the hook is scheduled - if not, schedule it.
-	function rss_pi_setup_schedule() {
+		add_action( 'wp', array(&$this, 'rss_pi_setup_schedule') );
+		add_action( 'rss_pi_cron',  array(&$this, 'rss_pi_do_this_hourly') );
+
+	}
+	
+	
+	/**
+	 * On an early action hook, check if the hook is scheduled - if not, schedule it.
+	 */
+	function rss_pi_setup_schedule()
+	{
 		if ( ! wp_next_scheduled( 'rss_pi_cron' ) ) {
 			wp_schedule_event( time(), 'hourly', 'rss_pi_cron');
 		}
 	}
 	
-	// On the scheduled action hook, run a function.
+	/**
+	 * On the scheduled action hook, run a function.
+	 */
 	function rss_pi_do_this_hourly()
 	{
 		$this->import_all_feeds();
 	}
-
+	
 	// Add to settings-menu
 	function admin_menu () {
 		add_options_page('Rss Post Importer','Rss Post Importer','manage_options','rss_pi', array($this, 'settings_page'));
@@ -217,7 +225,7 @@ class rss_pi {
 	
 	function import_all_feeds()
 	{
-		
+				
 		$post_count = 0;
 		
 		$options = $this->rss_pi_get_option();
