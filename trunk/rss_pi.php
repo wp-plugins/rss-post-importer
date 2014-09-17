@@ -4,7 +4,11 @@ Plugin Name: Rss Post Importer
 Plugin URI: -
 Description: This plugin lets you set up an import posts from one or several rss-feeds and save them as posts on your site, simple and flexible.
 Author: Jens Waern
+<<<<<<< .mine
+Version: 1.0.5
+=======
 Version: 1.0.4
+>>>>>>> .r991746
 Author URI: http://www.simmalugnt.se
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -315,13 +319,16 @@ class rss_pi {
 		$options = get_option('rss_pi_feeds');
 		
 		// Insert new settings
-		if(!array_key_exists('enable_logging', $options['settings']))
+		if( is_array($options) )
 		{
-			$options['settings']['enable_logging'] = 'false';
-		}
-		if(!array_key_exists('imports', $options))
-		{
-			$options['imports'] = 0;
+			if(!array_key_exists('enable_logging', $options['settings']))
+			{
+				$options['settings']['enable_logging'] = 'false';
+			}
+			if(!array_key_exists('imports', $options))
+			{
+				$options['imports'] = 0;
+			}
 		}
 		
 		return $options;
