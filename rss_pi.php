@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Rss Post Importer
-Plugin URI: -
+Plugin URI: https://wordpress.org/plugins/rss-post-importer/
 Description: This plugin lets you set up an import posts from one or several rss-feeds and save them as posts on your site, simple and flexible.
 Author: Jens Waern
-Version: 1.0.5
+Version: 1.0.6
 Author URI: http://www.simmalugnt.se
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,7 +49,7 @@ class rss_pi {
 		add_action('admin_menu', array(&$this, 'admin_menu'));
 		
 		$this->settings = array(
-			'version'	=>	'1.0.4',
+			'version'	=>	'1.0.6',
 			'dir'		=>	plugin_dir_path( __FILE__ )
 		);
 
@@ -61,9 +61,7 @@ class rss_pi {
 	}
 	
 	
-	/**
-	 * On an early action hook, check if the hook is scheduled - if not, schedule it.
-	 */
+	// On an early action hook, check if the hook is scheduled - if not, schedule it.
 	function rss_pi_setup_schedule()
 	{
 		if ( ! wp_next_scheduled( 'rss_pi_cron' ) ) {
@@ -71,9 +69,7 @@ class rss_pi {
 		}
 	}
 	
-	/**
-	 * On the scheduled action hook, run a function.
-	 */
+	// On the scheduled action hook, run a function.
 	function rss_pi_do_this_hourly()
 	{
 		$this->import_all_feeds();
@@ -85,15 +81,17 @@ class rss_pi {
 	}
 	
 	function settings_page () {
+		// If logpage is requested
 		if(isset($_GET['show']))
 		{
+			// Display the logpage
 			$do = $_GET['show'];
 			if($do == 'log')
 			{
 				die($this->log_page());
 			}
 		}
-		// Changes submitted, correct nonce
+		// Changes submitted, check for correct nonce
 		if( isset($_POST['info_update']) && wp_verify_nonce($_POST['rss_pi_nonce'],'settings_page')) : 
 			
 			// Get ids of feed-rows
@@ -101,7 +99,7 @@ class rss_pi {
 			
 			$feeds = array();
 			
-			
+			// Get selected settings for all imported posts
 			$settings = array(
 				'frequency' => $_POST['frequency'],
 				'post_template' => stripslashes_deep($_POST['post_template']),
@@ -111,12 +109,15 @@ class rss_pi {
 				'enable_logging' => $_POST['enable_logging']
 			);
 			
+			// If cron settings have changed
+			if( wp_get_schedule( 'rss_pi_cron' ) != $settings['frequency'] )
+			{
+				// Reset cron
+				wp_clear_scheduled_hook( 'rss_pi_cron' );
+				wp_schedule_event( time(), $settings['frequency'], 'rss_pi_cron');
+			}
 			
-				
-			// Reset cron
-			wp_clear_scheduled_hook( 'rss_pi_cron' );
-			wp_schedule_event( time(), $settings['frequency'], 'rss_pi_cron');
-			
+			// Loop through feed-rows
 			foreach($ids as $id)
 			{
 				if($id)
@@ -156,7 +157,7 @@ class rss_pi {
 				
 		$ids = array();
 		
-		
+		// Load js and css
 		$this->input_admin_enqueue_scripts();
 		
 		include( $this->settings['dir'] . 'rss_pi-ui.php');
@@ -310,6 +311,7 @@ class rss_pi {
 		
 	}
 	
+	// Returns the settings for the plugin
 	function rss_pi_get_option()
 	{
 		$options = get_option('rss_pi_feeds');
