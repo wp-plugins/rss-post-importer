@@ -33,6 +33,9 @@ Features include:
 
 == Change Log ==
 
+= Version 1.0.6 =
+* Removed a bug causing save to reset and trigger a new cron.
+
 = Version 1.0.5 =
 * Minor improvements.
 
