@@ -13,6 +13,10 @@ RSS Post Importer is the Most Powerful & Easy to use WordPress RSS Aggregator pl
 
 == Description ==
 
+##This is the Best WordPress Plugin for Importing, Merging and Displaying RSS and Atom feeds on your WordPress site.
+
+***
+
 **The RSS Post Importer plugin fetchs an RSS feed and publishes the full article content or the feed titles in a list.**
 
 Content syndication allows a blogger to import an rss feed from other blogs in his niche, allowing him to share relevant content with his readers, with far less of a time commitment than writing his own posts or scheduling guest bloggers and ghost writers. 
