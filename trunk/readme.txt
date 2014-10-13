@@ -1,14 +1,4 @@
-﻿Quick Tips on How To Tell Better Stories with Content Curation
-
-A Simple Strategy To Get More Replies To The Emails You Send
-
-Why Your To-Do List is Broken and How You Can Fix It
-
-Information is knowledge
-information is power
-information is security
-
-=== Rss Post Importer ===
+﻿=== Rss Post Importer ===
 Contributors: jenswaern, feedsapi
 Donate link: **https://www.feedsapi.org/**
 Tags: rss, feeds, import, feed, autoblog, feed aggregation, rss-feed, aggregation, atom, feed, rss, syndication, FeedWordPress, autoblog aggregator, Autoblogger, autoblogging,  feed import, rss multi importer, feed reader, feed to post, multi feed import, multi feed importer, multi import, multi rss feeds, multiple feed import, multiple feeds, multiple rss feeds, rss, rss aggregator, rss feader, RSS import, rss to post, content curation, RSS Retriever, RSS fetch feed, WP RSS Aggregator, AutoPost, RSS Feed to Post, 
