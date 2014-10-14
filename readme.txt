@@ -53,6 +53,9 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 
 == Change Log ==
 
+= Version 1.0.7 =
+* Added support for Full Text RSS Feeds Content fetching.
+
 = Version 1.0.6 =
 * Removed a bug causing save to reset and trigger a new cron.
 

@@ -3,9 +3,9 @@
 Plugin Name: Rss Post Importer
 Plugin URI: https://wordpress.org/plugins/rss-post-importer/
 Description: This plugin lets you set up an import posts from one or several rss-feeds and save them as posts on your site, simple and flexible.
-Author: Jens Waern
-Version: 1.0.6
-Author URI: http://www.simmalugnt.se
+Author: feedsapi
+Version: 1.0.7
+Author URI: https://www.feedsapi.org/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -49,7 +49,7 @@ class rss_pi {
 		add_action('admin_menu', array(&$this, 'admin_menu'));
 		
 		$this->settings = array(
-			'version'	=>	'1.0.6',
+			'version'	=>	'1.0.7',
 			'dir'		=>	plugin_dir_path( __FILE__ )
 		);
 
@@ -102,6 +102,7 @@ class rss_pi {
 			// Get selected settings for all imported posts
 			$settings = array(
 				'frequency' => $_POST['frequency'],
+				'feeds_api_key'=> $_POST['feeds_api_key'],
 				'post_template' => stripslashes_deep($_POST['post_template']),
 				'post_status' => $_POST['post_status'],
 				'author_id' => $_POST['author_id'],
@@ -109,6 +110,8 @@ class rss_pi {
 				'enable_logging' => $_POST['enable_logging']
 			);
 			
+			$this->is_correct_api( $_POST['feeds_api_key'] );
+
 			// If cron settings have changed
 			if( wp_get_schedule( 'rss_pi_cron' ) != $settings['frequency'] )
 			{
@@ -167,10 +170,35 @@ class rss_pi {
 	{
 		include_once( ABSPATH . WPINC . '/feed.php' );
 		
-		// Get a SimplePie feed object from the specified feed source.
-		$rss = fetch_feed( $url );
-		
 		$options = $this->rss_pi_get_option();
+
+		$rss = "";
+
+		//if api key has been saved by user and is not empty
+		if(isset($options['settings']["feeds_api_key"]) && $options['settings']["feeds_api_key"]) {
+			
+			$feeds_api_key = $options['settings']["feeds_api_key"];
+			
+			$feedsapi_url = "http://www.feedsapi.org/fetch.php?key=".$feeds_api_key."&url=".$url;
+
+			/* DEBUGGING
+
+				touch("newfile.txt");
+				$myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+				$txt = print_r($options, true)."\n".$feeds_api_key."\n".$feedsapi_url;
+				fwrite($myfile, $txt);
+				fclose($myfile);
+			
+			*/
+			// Get a SimplePie feed object from the specified feed source.
+		
+			$rss = fetch_feed( $feedsapi_url );
+		}
+		else {
+			
+			$rss = fetch_feed( $url );
+			
+		}
 		
 		// Remove the surrounding <div> from XHTML content in Atom feeds.
 		
@@ -331,6 +359,27 @@ class rss_pi {
 		
 		return $options;
 	}
+
+	function is_correct_api($new_key) {
+		$options = $this->rss_pi_get_option();
+		$old_key = $options["settings"]["feeds_api_key"];
+		
+		if($new_key == $old_key)  return true;
+		
+		$url = "http://www.feedsapi.org/fetch.php?key=$new_key&url=http://dummyurl.com";
+		$content = file_get_contents($url);
+		if(trim($content) == "A valid key must be supplied") {
+			echo '<div class="error">
+			        <p>Invalid API key!</p>
+				</div>';
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+
 }
 new rss_pi;
 ?>
