@@ -25,7 +25,6 @@ Content syndication allows a blogger to import an rss feed from other blogs in h
 
 Not only does this WordPress RSS Aggregator Plugin import a snippet of the rss feed, it automatically imports the entire [**Full Text RSS Feed**](https://www.feedsapi.com) , allowing you to post the entire article on your site if you want. This means you're providing your readers with relevant content on a daily, weekly, or even hourly basis, depending on the top of blog you're running. RSS Post Importer is a great plugin for news aggregators, content syndicator, company blogs, current events bloggers, or deal bloggers, as it keeps the fresh content that your readers love you for, coming on a regular basis!
 
-This RSS Aggregator plugin is not a shortcode for just displaying a bunch of links from an rss feeds, RSS Post Importer imports data from a feed and saves it as full stand alone posts.
 
 **Features include:**
 
@@ -36,6 +35,11 @@ This RSS Aggregator plugin is not a shortcode for just displaying a bunch of lin
 * Set number of posts and category per feed.
 * Set what author to assign imported content to.
 * Simple template for formatting imported content.
+
+When you start importing rss feeds as a part of your content backup, autoblogging or blogging strategy, you'll be able to reap the benefits of increased content and a larger fan base, which will translate into more traffic and more revenue or dollars for your business!
+
+***PS***: By the way, this RSS Aggregator plugin is not a shortcode for just displaying a bunch of links from an rss feeds like some of the following plugins: 
+WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS Just Better, CyberSyn, CSV 2 Post, Simple Feed Copyright, HungryFEED, WP Pipes and many other I can't list here. **RSS Post Importer imports data from a feed and saves it as full stand alone posts.**
 
 == Installation ==
 
