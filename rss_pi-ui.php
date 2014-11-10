@@ -111,6 +111,7 @@
 																<code>{$permalink}</code>
 																<code>{$title}</code>
 																<code>{$feed_title}</code>
+                                                                                                                                <code>{$excerpt:n}</code>
 															</p>
 														</td>
 														<td>

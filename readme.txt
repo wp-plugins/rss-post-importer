@@ -4,7 +4,7 @@ Donate link: https://inspirepay.com/pay/simmalugnt
 Tags: rss, feeds, import, feed, autoblog, feed aggregation, rss-feed
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: trunk
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ Features include:
 1. This is the combined settings- and feed-management-screen.
 
 == Change Log ==
+= Version 1.0.9 =
+* Added support for excerpts.
+* Fixed some warnings and notices
 
 = Version 1.0.6 =
 * Removed a bug causing save to reset and trigger a new cron.
