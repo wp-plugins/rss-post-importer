@@ -32,14 +32,9 @@
 								<i class="icon-star"></i>
 								<i class="icon-star"></i>
 								<i class="icon-star"></i>
-								<p class="description"><a href="http://wordpress.org/plugins/rss-post-importer/" target="_blank">Please take 27 seconds to support this plugin by rating it with 5 Stars! Just click here</a></p>
+								<p class="description"><a href="http://wordpress.org/plugins/rss-post-importer/" target="_blank">Please support this plugin by rating it!</a></p>
 							</div>
 							<?php endif; ?>
-							
-							<?php $banner_url = plugins_url("/rss-post-importer/assets/rss-post-importer_280x600.jpg");?>
-							<a target="_blank" href="http://www.feedsapi.com/?utm=rsspostimporter_banner">
-								<img class='rss_pi_banner_img' src="<?php echo $banner_url; ?>" />
-							</a>
 						</div>
 						<div id="postbox-container-2" class="postbox-container">
 							<table class="widefat rss_pi-table" id="rss_pi-table">
@@ -104,19 +99,6 @@
 																	<option value="<?php echo $interval; ?>" <?php if($options['settings']['frequency'] == $interval) : echo('selected="selected"'); endif; ?>><?php echo $x[$interval][ 'display' ]; ?></option>
 																<?php endforeach; ?>
 															</select>
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<label for="feeds_api_key"><?php _e('Full Text RSS Feed API Key', "rss_pi"); ?></label>
-															<p class="description">
-																<?php _e('Boost Your traffic with Full RSS Content - ', "rss_pi"); ?> 
-																 Request a Free 14 Days <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank"> Full RSS Key Here !</a> 
-															</p>
-														</td>
-														<td>
-															<?php $feeds_api_key = isset($options['settings']["feeds_api_key"])? $options['settings']["feeds_api_key"] : "";   ?>
-															<input type="text" name="feeds_api_key" id="feeds_api_key" value="<?php echo $feeds_api_key; ?>" />
 														</td>
 													</tr>
 													<tr>
