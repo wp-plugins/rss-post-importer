@@ -265,16 +265,6 @@ class rss_pi {
                 return $post_count;
         }
 
-        function get_excerpt($text = '', $excerpt_size = 0) {
-
-                if (str_word_count($text, 0) > $excerpt_size) {
-                        $WordKey = str_word_count($text, 1);
-                        $WordIndex = array_flip(str_word_count($text, 2));
-                        return substr($text, 0, $WordIndex[$WordKey[$excerpt_size]]);
-                } else {
-                        return $$text;
-                }
-        }
 
         function parse_content($item, $feed_title, $strip_html) {
                 $options = $this->rss_pi_get_option();
@@ -294,7 +284,9 @@ class rss_pi {
                 $e_size = (is_array($matches) && !empty($matches)) ? $matches[1] : 0;
 
                 if ($e_size) {
-                        $parsed_content = preg_replace('/\{\$excerpt\:\d+\}/i', $this->get_excerpt($c, $e_size), $parsed_content);
+                        $trimmed_c = preg_replace('/<!--(.|\s)*?-->/', '', $c);
+                        $stripped_c = strip_tags($trimmed_c);
+                        $parsed_content = preg_replace('/\{\$excerpt\:\d+\}/i', wp_trim_words($stripped_c, $e_size), $parsed_content);
                 }
 
                 if ($strip_html == 'true') {

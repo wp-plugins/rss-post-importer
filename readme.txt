@@ -5,7 +5,7 @@ Tags: rss, feeds, import, feed, autoblog, feed aggregation, rss-feed, aggregatio
 RSSImport, yahoo pipes, WP Pipes, Import XML feed , FeedSyndicate, RSSpost, RSS in Page
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: trunk
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,7 +28,6 @@ Not only does this WordPress RSS Aggregator Plugin import a snippet of the rss f
 
 **Features include:**
 
-* Importing Featured Image automatically.
 * Importing feeds automatically using cron.
 * Importing the full text rss feeds content.
 * Display the full content of the articles.
@@ -36,7 +35,6 @@ Not only does this WordPress RSS Aggregator Plugin import a snippet of the rss f
 * Set number of posts and category per feed.
 * Set what author to assign imported content to.
 * Simple template for formatting imported content.
-* Importing feeds Excerpts, you can define the number of words {n}.
 
 When you start importing rss feeds as a part of your content backup, autoblogging or blogging strategy, you'll be able to reap the benefits of increased content and a larger fan base, which will translate into more traffic and more revenue or dollars for your business!
 
@@ -54,10 +52,12 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 1. This is the combined settings- and feed-management-screen.
 
 == Change Log ==
-
 = Version 1.0.9 =
-* Added support for Excerpt Content fetching.
-* Added support for Featured Image fetching.
+* Added support for excerpts.
+* Fixed some warnings and notices
+
+= Version 1.0.8 =
+* Added support for featured image.
 
 = Version 1.0.7 =
 * Added support for Full Text RSS Feeds Content fetching.
