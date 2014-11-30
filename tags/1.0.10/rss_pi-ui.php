@@ -144,6 +144,8 @@
                                                                                                                         : '{$content}' . "\nSource: " . '{$feed_title}'
                                                                                                                         );
                                                                                                                 
+                                                                                                                $value = str_replace(array('\r', '\n'), array(chr(13), chr(10)), $value);
+                                                                                                                
                                                                                                                 echo stripslashes($value);
                                                                                                         ?></textarea>
                                                                                                 </td>
