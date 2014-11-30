@@ -4,7 +4,7 @@
   Plugin URI: https://wordpress.org/plugins/rss-post-importer/
   Description: This plugin lets you set up an import posts from one or several rss-feeds and save them as posts on your site, simple and flexible.
   Author: feedsapi
-  Version: 1.0.9
+  Version: 1.0.10
   Author URI: https://www.feedsapi.org/
   License: GPLv2 or later
   License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -44,7 +44,7 @@ class rss_pi {
                 add_action('admin_menu', array(&$this, 'admin_menu'));
 
                 $this->settings = array(
-                    'version' => '1.0.7',
+                    'version' => '1.0.10',
                     'dir' => plugin_dir_path(__FILE__)
                 );
 
@@ -213,7 +213,7 @@ class rss_pi {
 
                                                 add_action('save_rss_pi_post', $post_id);
 
-                                                $meta_id = $this->insert_featured_image($new_post['post_content'], $post_id);
+                                                $meta_id = $this->insert_featured_image($item, $post_id);
 
                                                 add_post_meta($post_id, 'rss_pi_source_url', esc_url($item->get_permalink()));
 
@@ -265,7 +265,6 @@ class rss_pi {
                 return $post_count;
         }
 
-
         function parse_content($item, $feed_title, $strip_html) {
                 $options = $this->rss_pi_get_option();
                 $post_template = $options['settings']['post_template'];
@@ -274,10 +273,10 @@ class rss_pi {
                 $c = apply_filters('pre_rss_pi_parse_content', $c);
 
 
-                $parsed_content = str_replace('{$content}', $c, $post_template);
-                $parsed_content = str_replace('{$permalink}', esc_url($item->get_permalink()), $parsed_content);
-                $parsed_content = str_replace('{$feed_title}', $feed_title, $parsed_content);
-                $parsed_content = str_replace('{$title}', $item->get_title(), $parsed_content);
+                $parsed_content = preg_replace('/\{\$content\}/i', $c, $post_template);
+                $parsed_content = preg_replace('/\{\$permalink\}/i', '<a href="' . esc_url($item->get_permalink()) . '" target="_blank">' . $item->get_title() . '</a>', $parsed_content);
+                $parsed_content = preg_replace('/\{\$feed_title\}/i', $feed_title, $parsed_content);
+                $parsed_content = preg_replace('/\{\$title\}/i', $item->get_title(), $parsed_content);
 
                 preg_match('/\{\$excerpt\:(\d+)\}/i', $parsed_content, $matches);
 
@@ -297,22 +296,25 @@ class rss_pi {
                 return $parsed_content;
         }
 
-        function insert_featured_image($content, $post_id) {
+        function insert_featured_image($item, $post_id) {
+
+                $content = $item->get_content() != "" ? $item->get_content() : $item->get_description();
 
                 preg_match('/<img.+?src="(.+?)"[^}]+>/i', $content, $matches);
 
                 $img_url = (is_array($matches) && !empty($matches)) ? $matches[1] : '';
 
-                if (!empty($img_url)) {
+                if (empty($img_url)) {
                         return false;
                 }
 
                 $featured_id = $this->media_sideload_image($img_url, $post_id, '');
 
                 add_action('set_rss_pi_featured_image', $featured_id, $post_id);
+
                 return $meta_id = set_post_thumbnail($post_id, $featured_id);
         }
-        
+
         /**
          *  Modification of default media_sideload_image
          * 
@@ -323,12 +325,12 @@ class rss_pi {
          */
         function media_sideload_image($file, $post_id, $desc = null) {
                 $id = 0;
-                
+
                 if (!empty($file)) {
                         // Set variables for storage, fix file filename for query strings.
                         preg_match('/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches);
                         $file_array = array();
-                        $file_array['name'] = basename($matches[0]);
+                        $file_array['name'] = basename($file);
 
                         // Download file to temp location.
                         $file_array['tmp_name'] = download_url($file);
@@ -385,23 +387,22 @@ class rss_pi {
         // Returns the settings for the plugin
         function rss_pi_get_option() {
                 $default_settings = array(
-                        'enable_logging' => false,
-                        'feeds_api_key' => false,
-                        'frequency'     => 0,
-                        'post_template' => '{\$content}\nSource: {\$feed_title}',
-                        'post_status'   => 'publish',
-                        'author_id'     => 1,
-                        'allow_comments' => true,
-                    
+                    'enable_logging' => false,
+                    'feeds_api_key' => false,
+                    'frequency' => 0,
+                    'post_template' => '{\$content}\nSource: {\$feed_title}',
+                    'post_status' => 'publish',
+                    'author_id' => 1,
+                    'allow_comments' => true,
                 );
                 $options = get_option('rss_pi_feeds', array());
-                
-                if(!isset($options['settings'])){
+
+                if (!isset($options['settings'])) {
                         $options['settings'] = array();
                 }
-                
-                $options['settings'] = wp_parse_args($options['settings'],$default_settings);
-                
+
+                $options['settings'] = wp_parse_args($options['settings'], $default_settings);
+
 
                 if (!array_key_exists('imports', $options)) {
                         $options['imports'] = 0;
@@ -412,7 +413,7 @@ class rss_pi {
 
         function is_correct_api($new_key) {
                 $options = $this->rss_pi_get_option();
-    
+
                 $old_key = $options['settings']["feeds_api_key"];
 
                 if ($new_key == $old_key)
