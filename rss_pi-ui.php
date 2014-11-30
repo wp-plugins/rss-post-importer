@@ -35,6 +35,11 @@
                                                                 <p class="description"><a href="http://wordpress.org/plugins/rss-post-importer/" target="_blank">Please support this plugin by rating it!</a></p>
                                                         </div>
                                                 <?php endif; ?>
+                                                
+                                                <?php $banner_url = plugins_url("/rss-post-importer/assets/rss-post-importer_280x600.jpg");?>
+                                                <a target="_blank" href="http://www.feedsapi.com/?utm=rsspostimporter_banner">
+                                                        <img class='rss_pi_banner_img' src="<?php echo $banner_url; ?>" />
+                                                </a>
                                         </div>
                                         <div id="postbox-container-2" class="postbox-container">
                                                 <table class="widefat rss_pi-table" id="rss_pi-table">
@@ -132,7 +137,15 @@
                                                                                                         </p>
                                                                                                 </td>
                                                                                                 <td>
-                                                                                                        <textarea name="post_template" id="post_template" cols="30" rows="10"><?php echo($options['settings']['post_template'] != '' ? $options['settings']['post_template'] : '{$content}' . "\nSource: " . '{$feed_title}'); ?></textarea>
+                                                                                                        <textarea name="post_template" id="post_template" cols="30" rows="10"><?php
+                                                                                                                $value = (
+                                                                                                                        $options['settings']['post_template'] != '' 
+                                                                                                                        ? $options['settings']['post_template'] 
+                                                                                                                        : '{$content}' . "\nSource: " . '{$feed_title}'
+                                                                                                                        );
+                                                                                                                
+                                                                                                                echo stripslashes($value);
+                                                                                                        ?></textarea>
                                                                                                 </td>
                                                                                         </tr>
                                                                                         <tr>
