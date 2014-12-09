@@ -1,11 +1,11 @@
-﻿=== RSS Post Importer ===
+=== RSS Post Importer ===
 Contributors: feedsapi
 Donate link: https://www.feedsapi.org/
 Tags: rss, feeds, import, feed, autoblog, feed aggregation, rss-feed, aggregation, atom, feed, rss, syndication, FeedWordPress, autoblog aggregator, Autoblogger, autoblogging,  feed import, rss multi importer, feed reader, feed to post, multi feed import, multi feed importer, multi import, multi rss feeds, multiple feed import, multiple feeds, multiple rss feeds, rss, rss aggregator, rss feader, RSS import, rss to post, content curation, RSS Retriever, RSS fetch feed, WP RSS Aggregator, AutoPost, RSS Feed to Post, 
 RSSImport, yahoo pipes, WP Pipes, Import XML feed , FeedSyndicate, RSSpost, RSS in Page
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.0.10
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,9 @@ RSS Post Importer is the Most Powerful & Easy to use WordPress RSS Aggregator pl
 
 **The RSS Post Importer plugin fetchs an RSS feed and publishes the full article content of each Feed Item as stand-alone post.**
 
-Content syndication allows a blogger to import an rss feed from other blogs in his niche, allowing him to share relevant content with his readers, with far less of a time commitment than writing his own posts or scheduling guest bloggers and ghost writers. 
+Content syndication allows a blogger to import an rss feed from other blogs in his niche, allowing him to share relevant content with his readers, with far less of a time commitment than writing his own posts or scheduling guest bloggers and ghost writers. RSS Post Importer is very easy to install, here's how:
+
+[vimeo https://vimeo.com/113134777]
 
 **RSS Post Importer** handles all of that, it will import and publish Full Text RSS Posts from one or several RSS feeds sources to your WordPress blog on Auto-pilot while you are laying on the beach of doing some other work, making your blogging, content syndication strategy & autoblogging life much more easier! 
 
@@ -36,9 +38,27 @@ Not only does this WordPress RSS Aggregator Plugin import a snippet of the rss f
 * Set what author to assign imported content to.
 * Simple template for formatting imported content.
 
+**Premium Features include:**
+
+* Full Text RSS Feeds
+* Automated Featured images.
+* Keywords Based Filters and Curation .
+* RegEx Based Filters and Curation.
+* Define the number of Words Your Excerpt should have.
+* Fetch Full Text Articles + Images from Truncated Feeds.
+* Assign Any Imported RSS Feed Stream to a specific Author.
+
+**Don't take my word for it, here's how easy to use it is:**
+
+[vimeo https://vimeo.com/113796278]
+
+
+**You should watch this video tutorial**
+
+
 When you start importing rss feeds as a part of your content backup, autoblogging or blogging strategy, you'll be able to reap the benefits of increased content and a larger fan base, which will translate into more traffic and more revenue or dollars for your business!
 
-***PS***: By the way, this RSS Aggregator plugin is not a shortcode for just displaying a bunch of links from an rss feeds like some of the following plugins: 
+**PS**: By the way, this RSS Aggregator plugin is not a shortcode for just displaying a bunch of links from an rss feeds like some of the following plugins: 
 WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS Just Better, CyberSyn, CSV 2 Post, Simple Feed Copyright, WP Syndicate, HungryFEED, WP Pipes and many other I can't list here. **RSS Post Importer imports data from a feed and saves it as full stand alone posts.**
 
 == Installation ==
@@ -47,11 +67,20 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Set up what feeds to import and when!
 
+[vimeo https://vimeo.com/113134777]
+
 == Screenshots ==
 
 1. This is the combined settings- and feed-management-screen.
 
 == Change Log ==
+
+= Version 2.0 =
+* Re-factored and rewritten almost all code
+* Fixed featured image and shortcode placeholders
+* Added support for keyword/regex based filtering
+* Added support for per feed author
+* Update readme
 
 = Version 1.0.10 =
 * Fixed replacement shortcodes
