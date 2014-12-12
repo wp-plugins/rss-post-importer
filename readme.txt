@@ -5,7 +5,7 @@ Tags: rss, feeds, import, feed, autoblog, feed aggregation, rss-feed, aggregatio
 RSSImport, yahoo pipes, WP Pipes, Import XML feed , FeedSyndicate, RSSpost, RSS in Page
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 2.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,10 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 1. This is the combined settings- and feed-management-screen.
 
 == Change Log ==
+
+= Version 2.0.1 =
+* Fixed cron error
+* Fixed permalink placeholder truncation
 
 = Version 2.0 =
 * Re-factored and rewritten almost all code

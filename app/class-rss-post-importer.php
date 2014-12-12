@@ -79,7 +79,8 @@ class rssPostImporter {
 
                 // initialise admin and cron
                 $this->cron = new rssPICron();
-
+                $this->cron->init();
+                
                 $this->admin = new rssPIAdmin();
                 $this->admin->init();
         }

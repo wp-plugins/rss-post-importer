@@ -29,7 +29,6 @@ class rssPIParser {
 
                 // do all the replacements
                 $parsed_content = preg_replace('/\{\$content\}/i', $c, $post_template);
-                $parsed_content = preg_replace('/\{\$permalink\}/i', '<a href="' . esc_url($item->get_permalink()) . '" target="_blank">' . $item->get_title() . '</a>', $parsed_content);
                 $parsed_content = preg_replace('/\{\$feed_title\}/i', $feed_title, $parsed_content);
                 $parsed_content = preg_replace('/\{\$title\}/i', $item->get_title(), $parsed_content);
                 
@@ -40,6 +39,9 @@ class rssPIParser {
                 if ($strip_html == 'true') {
                         $parsed_content = strip_tags($parsed_content);
                 }
+                
+                $parsed_content = preg_replace('/\{\$permalink\}/i', '<a href="' . esc_url($item->get_permalink()) . '" target="_blank">' . $item->get_title() . '</a>', $parsed_content);
+                
 
                 $parsed_content = apply_filters('after_rss_pi_parse_content', $parsed_content);
                 
