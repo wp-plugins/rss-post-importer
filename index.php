@@ -28,7 +28,7 @@ if (!defined('RSS_PI_BASENAME')) {
 }
 
 if (!defined('RSS_PI_VERSION')) {
-        define('RSS_PI_VERSION', '2.0.1');
+        define('RSS_PI_VERSION', '2.0.2');
 }
 
 if (!defined('RSS_PI_LOG_PATH')) {
