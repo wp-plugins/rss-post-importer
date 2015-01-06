@@ -44,7 +44,7 @@ if(is_array($f['category_id'])){
         </td>
         <td><?php echo $f['url']; ?></td>
         <td><?php echo $f['max_posts']; ?></td>
-        <td width="20%"><?php echo $category; ?></td>
+       <!-- <td width="20%"><?php //echo $category; ?></td>-->
 </tr>
 <tr id="edit_<?php echo ($f['id']); ?>" class="edit-row <?php echo $show; ?>">
         <td colspan="4">

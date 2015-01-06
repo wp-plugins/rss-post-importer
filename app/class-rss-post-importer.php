@@ -45,7 +45,7 @@ class rssPostImporter {
                     'post_template' => "{\$content}\nSource: {\$feed_title}",
                     'post_status' => 'publish',
                     'author_id' => 1,
-                    'allow_comments' => true,
+                    'allow_comments' => 'open',
 					'block_indexing' => false,
                     'keywords' => array()
                 );
