@@ -15,7 +15,23 @@ if (!isset($f)) {
         $show = 'show';
 }
 
-$category = get_the_category_by_ID(intval($f['category_id']));
+if(is_array($f['category_id'])){
+	foreach ( $f['category_id'] as $cat ) {  
+		$catarray[] = get_cat_name($cat);
+	}
+	$category = join(',', $catarray);
+}else{
+	if(empty($f['category_id'])){
+		$f['category_id'] = array(1);
+		$category = get_the_category_by_ID(1);
+	}
+	else{
+		$f['category_id'] = array($f['category_id']);
+		$category = get_the_category_by_ID(intval($f['category_id']));
+	}
+		
+}
+
 ?>
 
 <tr id="display_<?php echo ($f['id']); ?>" class="data-row <?php echo $show; ?>">
@@ -28,7 +44,7 @@ $category = get_the_category_by_ID(intval($f['category_id']));
         </td>
         <td><?php echo $f['url']; ?></td>
         <td><?php echo $f['max_posts']; ?></td>
-        <td><?php echo $category; ?></td>
+        <td width="20%"><?php echo $category; ?></td>
 </tr>
 <tr id="edit_<?php echo ($f['id']); ?>" class="edit-row <?php echo $show; ?>">
         <td colspan="4">
@@ -69,7 +85,26 @@ $category = get_the_category_by_ID(intval($f['category_id']));
                         </tr>
                         <tr>
                                 <td><label for=""><?php _e("Category", 'rss_pi'); ?></label></td>
-                                <td><?php wp_dropdown_categories(array('hide_empty' => 0,  'hierarchical' => true, 'id' => $f['id'] . '-category_id', 'name' => $f['id'] . '-category_id', 'selected' => $f['category_id'])); ?></td>
+                                <td>
+                                <?php
+									$disabled = '';
+									if (!$this->is_key_valid) {
+										   $this->key_error($this->key_prompt_multiple_category, true);
+										  wp_dropdown_categories(array('hide_empty' => 0,  'hierarchical' => true, 'id' => $f['id'] . '-category_id', 'name' => $f['id'] . '-category_id', 'selected' => $f['category_id']));
+									}
+									else{
+										?>
+										<div class="category_container">
+										<?php 
+										$rss_post_pi_admin = new rssPIAdmin();
+										$allcats = $rss_post_pi_admin->wp_category_checklist_rss_pi(0, false,$f['category_id']);
+										$allcats = str_replace( 'name="post_category[]"', 'name="'.$f['id'].'-category_id[]"', $allcats );
+										echo $allcats;
+										  ?></div>
+										<?php
+									}
+									?>
+								</td>
                         </tr>
                         <tr>
                                 <td><label for=""><?php _e("Strip html tags", 'rss_pi'); ?></label></td>
