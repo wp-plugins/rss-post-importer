@@ -67,6 +67,7 @@ class rssPIAdminProcessor {
                     'post_status' => $_POST['post_status'],
                     'author_id' => $_POST['author_id'],
                     'allow_comments' => $_POST['allow_comments'],
+					'block_indexing' => $_POST['block_indexing'],
                     'enable_logging' => $_POST['enable_logging'],
                     'keywords' => array()
                 );

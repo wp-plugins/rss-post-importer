@@ -351,6 +351,15 @@ class rssPIEngine {
          */
         private function _insert($post, $url) {
 
+				if($post['post_category'][0] == ""){
+					$post['post_category'] = array(1);
+				}else{
+					if(is_array($post['post_category'][0]))
+						$post['post_category']= array_values($post['post_category'][0]);
+					else
+						$post['post_category']= array_values($post['post_category']);
+				}
+	
                 $_post = apply_filters('pre_rss_pi_insert_post', $post);
 
                 $post_id = wp_insert_post($_post);

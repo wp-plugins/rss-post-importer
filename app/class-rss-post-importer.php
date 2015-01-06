@@ -46,6 +46,7 @@ class rssPostImporter {
                     'post_status' => 'publish',
                     'author_id' => 1,
                     'allow_comments' => true,
+					'block_indexing' => false,
                     'keywords' => array()
                 );
 
@@ -83,6 +84,9 @@ class rssPostImporter {
                 
                 $this->admin = new rssPIAdmin();
                 $this->admin->init();
+				
+				$this->front = new rssPIFront();
+                $this->front->init();
         }
 
         /**

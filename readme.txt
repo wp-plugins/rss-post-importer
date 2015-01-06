@@ -4,8 +4,8 @@ Donate link: https://www.feedsapi.org/
 Tags: rss, feeds, import, feed, autoblog, feed aggregation, rss-feed, aggregation, atom, feed, rss, syndication, FeedWordPress, autoblog aggregator, Autoblogger, autoblogging,  feed import, rss multi importer, feed reader, feed to post, multi feed import, multi feed importer, multi import, multi rss feeds, multiple feed import, multiple feeds, multiple rss feeds, rss, rss aggregator, rss feader, RSS import, rss to post, content curation, RSS Retriever, RSS fetch feed, WP RSS Aggregator, AutoPost, RSS Feed to Post, 
 RSSImport, yahoo pipes, WP Pipes, Import XML feed , FeedSyndicate, RSSpost, RSS in Page
 Requires at least: 3.5
-Tested up to: 4.0
-Stable tag: 2.0.1
+Tested up to: 4.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ RSS Post Importer is the Most Powerful & Easy to use WordPress RSS Aggregator pl
 
 == Description ==
 
-**This is the Best WordPress Plugin for Syndicating, Importing, Merging and Displaying Full Text RSS and Atom feeds on your WordPress Blog.**
+**This is the Best WordPress Plugin for Syndicating, Importing, Curating, Merging and Displaying Full Text RSS and Atom feeds on your WordPress Blog.**
 
 
 
@@ -37,6 +37,7 @@ Not only does this WordPress RSS Aggregator Plugin import a snippet of the rss f
 * Set number of posts and category per feed.
 * Set what author to assign imported content to.
 * Simple template for formatting imported content.
+* Block search indexing to prevent your content from appearing in search results.
 
 **Premium Features include:**
 
@@ -47,6 +48,7 @@ Not only does this WordPress RSS Aggregator Plugin import a snippet of the rss f
 * Define the number of Words Your Excerpt should have.
 * Fetch Full Text Articles + Images from Truncated Feeds.
 * Assign Any Imported RSS Feed Stream to a specific Author.
+* Multiple category selection when import post.
 
 **Don't take my word for it, here's how easy to use it is:**
 
@@ -74,6 +76,10 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 1. This is the combined settings- and feed-management-screen.
 
 == Change Log ==
+
+= Version 2.0.2 =
+* Block search indexing
+* Multiple category selection for premium users
 
 = Version 2.0.1 =
 * Fixed cron error

@@ -38,6 +38,8 @@ class rssPIAdmin {
 
                 // add a key prompt
                 $this->key_prompt = __('You need a <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">Full Text RSS Key</a> to activate this section, please <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">get one and try it free</a> for the next 14 days to see how it goes.', 'rss_pi');
+				
+				 $this->key_prompt_multiple_category = __('Multiple Category selection available.You need a <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">Full Text RSS Key</a> to activate this section, please <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">get one and try it free</a> for the next 14 days to see how it goes.', 'rss_pi');
 
                 // initialise logging
                 $this->log = new rssPILog();
@@ -169,5 +171,62 @@ class rssPIAdmin {
                 // otherwise just disable the dropdown
                 return str_replace('<select ', '<select disabled="disabled" ', $output);
         }
-
+		/**
+         * Walker class function for category multiple checkbox
+         * 
+         * 
+         * 
+         */
+		function wp_category_checklist_rss_pi($post_id = 0, $descendants_and_self = 0, $selected_cats = false, $popular_cats = false, $walker = null, $checked_ontop = true)
+		{
+			$cat = "";
+			if (empty($walker) || !is_a($walker, 'Walker'))
+				$walker = new Walker_Category_Checklist;
+			$descendants_and_self = (int) $descendants_and_self;
+			$args                 = array();
+			if (is_array($selected_cats))
+				$args['selected_cats'] = $selected_cats;
+			elseif ($post_id)
+				$args['selected_cats'] = wp_get_post_categories($post_id);
+			else
+				$args['selected_cats'] = array();
+			
+			if ($descendants_and_self) {
+				$categories = get_categories("child_of=$descendants_and_self&hierarchical=0&hide_empty=0");
+				$self       = get_category($descendants_and_self);
+				array_unshift($categories, $self);
+			} else {
+				$categories = get_categories('get=all');
+			}
+			if ($checked_ontop) {
+				// Post process $categories rather than adding an exclude to the get_terms() query to keep the query the same across all posts (for any query cache)
+				$checked_categories = array();
+				$keys               = array_keys($categories);
+				foreach ($keys as $k) {
+					if (in_array($categories[$k]->term_id, $args['selected_cats'])) {
+						$checked_categories[] = $categories[$k];
+						unset($categories[$k]);
+					}
+				}
+				// Put checked cats on top
+				$cat = $cat . call_user_func_array(array(
+					&$walker,
+					'walk'
+				), array(
+					$checked_categories,
+					0,
+					$args
+				));
+			}
+			// Then the rest of them
+			$cat = $cat . call_user_func_array(array(
+				&$walker,
+				'walk'
+			), array(
+				$categories,
+				0,
+				$args
+			));
+			return $cat;
+		}
 }

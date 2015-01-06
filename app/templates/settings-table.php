@@ -135,6 +135,22 @@
                                         </tr>
                                         <tr>
                                                 <td>
+                                                        <?php _e('Block search indexing?', "rss_pi"); ?>
+                                                        <p class="description"><?php _e('Prevent your content from appearing in search results.', "rss_pi"); ?></p>
+                                                </td>
+                                                <td>
+                                                        <ul class="radiolist">
+                                                                <li>
+                                                                        <label><input type="radio" id="block_indexing" name="block_indexing" value="true" <?php echo($this->options['settings']['block_indexing'] == 'true' ? 'checked="checked"' : ''); ?> /> <?php _e('Yes', 'rss_pi'); ?></label>
+                                                                </li>
+                                                                <li>
+                                                                        <label><input type="radio" id="block_indexing" name="block_indexing" value="false" <?php echo($this->options['settings']['block_indexing'] == 'false' || $this->options['settings']['block_indexing'] == '' ? 'checked="checked"' : ''); ?> /> <?php _e('No', 'rss_pi'); ?></label>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                        </tr>
+                                        <tr>
+                                                <td>
                                                         <?php _e('Enable logging?', "rss_pi"); ?>
                                                         <p class="description"><?php _e('The logfile can be found <a href="#" class="load-log">here</a>.', "rss_pi"); ?></p>
                                                 </td>
