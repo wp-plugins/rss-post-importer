@@ -4,7 +4,7 @@
                         <th><?php _e("Feed name", 'rss_pi'); ?></th>
                         <th><?php _e("Feed url", 'rss_pi'); ?></th>
                         <th><?php _e("Max posts / import", 'rss_pi'); ?></th>
-                        <th><?php _e("Category", 'rss_pi'); ?></th>
+                        <!--<th><?php _e("Category", 'rss_pi'); ?></th>-->
                 </tr>
         </thead>
         <tbody class="rss-rows">

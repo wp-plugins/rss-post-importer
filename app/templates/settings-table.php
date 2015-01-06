@@ -125,7 +125,7 @@
                                                 <td>
                                                         <ul class="radiolist">
                                                                 <li>
-                                                                        <label><input type="radio" id="allow_comments" name="allow_comments" value="true" <?php echo($this->options['settings']['allow_comments'] == true ? 'checked="checked"' : ''); ?> /> <?php _e('Yes', 'rss_pi'); ?></label>
+                                                                        <label><input type="radio" id="allow_comments" name="allow_comments" value="open" <?php echo($this->options['settings']['allow_comments'] == 'open' ? 'checked="checked"' : ''); ?> /> <?php _e('Yes', 'rss_pi'); ?></label>
                                                                 </li>
                                                                 <li>
                                                                         <label><input type="radio" id="allow_comments" name="allow_comments" value="false" <?php echo($this->options['settings']['allow_comments'] == 'false' ? 'checked="checked"' : ''); ?> /> <?php _e('No', 'rss_pi'); ?></label>
