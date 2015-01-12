@@ -9,12 +9,41 @@ if (!isset($f)) {
             'max_posts' => 5,
             'author_id' => 1,
             'category_id' => 1,
+			'tags_id' => array(),
             'strip_html' => 'false'
         );
 
         $show = 'show';
 }
 
+if(is_array($f['tags_id'])){
+	if(!empty($f['tags_id'])){
+		foreach ( $f['tags_id'] as $tag ) {  
+			$tagname = get_tag($tag);
+			$tagarray[] = $tagname->name;
+		}
+		$tag = join(',', $tagarray);
+	}
+	else{
+		$tag = array();
+	}
+	
+}else{
+	if(empty($f['tags_id'])){
+		$f['tags_id'] = array();
+		$tag = '';
+	}
+	else{
+		$f['tags_id'] = array($f['tags_id']);
+		$tagname = get_tag(intval($f['tags_id']));
+		$tag = $tagname->name;
+	}
+		
+}
+
+/*echo "<pre>";
+print_r($f);
+exit;*/
 if(is_array($f['category_id'])){
 	foreach ( $f['category_id'] as $cat ) {  
 		$catarray[] = get_cat_name($cat);
@@ -87,6 +116,7 @@ if(is_array($f['category_id'])){
                                 <td><label for=""><?php _e("Category", 'rss_pi'); ?></label></td>
                                 <td>
                                 <?php
+									$rss_post_pi_admin = new rssPIAdmin();
 									$disabled = '';
 									if (!$this->is_key_valid) {
 										   $this->key_error($this->key_prompt_multiple_category, true);
@@ -96,10 +126,30 @@ if(is_array($f['category_id'])){
 										?>
 										<div class="category_container">
 										<?php 
-										$rss_post_pi_admin = new rssPIAdmin();
+										
 										$allcats = $rss_post_pi_admin->wp_category_checklist_rss_pi(0, false,$f['category_id']);
 										$allcats = str_replace( 'name="post_category[]"', 'name="'.$f['id'].'-category_id[]"', $allcats );
 										echo $allcats;
+										  ?></div>
+										<?php
+									}
+									?>
+								</td>
+                        </tr>
+                        <tr>
+                                <td><label for=""><?php _e("Tags", 'rss_pi'); ?></label></td>
+                                <td>
+                                <?php
+									$disabled = '';
+									if (!$this->is_key_valid) {
+										   $this->key_error($this->key_prompt_multiple_tags, true);
+										   echo $rss_post_pi_admin->rss_pi_tags_dropdown($f['id'],$f['tags_id']);
+									}
+									else{
+										?>
+										<div class="tags_container">
+										<?php 
+												echo $rss_post_pi_admin->rss_pi_tags_checkboxes($f['id'],$f['tags_id']);
 										  ?></div>
 										<?php
 									}

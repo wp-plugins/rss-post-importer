@@ -89,6 +89,7 @@ class rssPIEngine {
                     'max_posts' => $f['max_posts'],
                     'author_id' => $f['author_id'],
                     'category_id' => $f['category_id'],
+					'tags_id' => $f['tags_id'],
                     'strip_html' => $f['strip_html'],
                     'save_to_db' => true
                 );
@@ -113,6 +114,7 @@ class rssPIEngine {
                     'max_posts' => 5,
                     'author_id' => 1,
                     'category_id' => 0,
+					'tags_id' => array(),
                     'strip_html' => true,
                     'save_to_db' => true
                 );
@@ -297,6 +299,16 @@ class rssPIEngine {
 
                 foreach ($items as $item) {
                         if (!$this->post_exists($item->get_permalink())) {
+								/* Code to convert tags id array to tag name array **/
+								if(!empty($args['tags_id'])){
+									foreach($args['tags_id'] as $tagid){
+										$tag_name = get_tag($tagid); // <-- your tag ID
+										$tags_name[] = $tag_name->name;
+									}
+								}else{
+									$tags_name = array();
+								}
+								
                                 $post = array(
                                     'post_title' => $item->get_title(),
                                     // parse the content
@@ -304,10 +316,11 @@ class rssPIEngine {
                                     'post_status' => $this->options['settings']['post_status'],
                                     'post_author' => $args['author_id'],
                                     'post_category' => array($args['category_id']),
+									'tags_input' => $tags_name,
                                     'comment_status' => $this->options['settings']['allow_comments'],
                                     'post_date' => $item->get_date('Y-m-d H:i:s')
                                 );
-
+								
                                 // insert as post
                                 $post_id = $this->_insert($post, $item->get_permalink());
 
@@ -361,6 +374,7 @@ class rssPIEngine {
 				}
 	
                 $_post = apply_filters('pre_rss_pi_insert_post', $post);
+
 
                 $post_id = wp_insert_post($_post);
 
