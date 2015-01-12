@@ -40,7 +40,8 @@ class rssPIAdmin {
                 $this->key_prompt = __('You need a <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">Full Text RSS Key</a> to activate this section, please <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">get one and try it free</a> for the next 14 days to see how it goes.', 'rss_pi');
 				
 				 $this->key_prompt_multiple_category = __('Multiple Category selection available.You need a <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">Full Text RSS Key</a> to activate this section, please <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">get one and try it free</a> for the next 14 days to see how it goes.', 'rss_pi');
-
+				 $this->key_prompt_multiple_tags = __('Multiple Tags selection available.You need a <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">Full Text RSS Key</a> to activate this section, please <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">get one and try it free</a> for the next 14 days to see how it goes.', 'rss_pi');
+				 
                 // initialise logging
                 $this->log = new rssPILog();
                 $this->log->init();
@@ -228,5 +229,48 @@ class rssPIAdmin {
 				$args
 			));
 			return $cat;
+		}
+		
+		function rss_pi_tags_dropdown($fid,$seleced_tags){
+			if ($tags = get_tags( array('orderby' => 'name','hide_empty' => false) ))
+			{
+				
+				echo '<select name="'.$fid.'-tags_id[]" id="tag" class="postform">';
+				
+				foreach ($tags as $tag)
+				{
+					$strsel = "";
+					if(!empty($seleced_tags)){
+						
+						if($seleced_tags[0] == $tag->term_id){
+							$strsel = "selected='selected'";
+							
+						}
+					}
+					echo '<option value="'.$tag->term_id.'" '.$strsel.'>'.$tag->name.'</option>';
+					
+				}
+				echo '</select> ';
+				
+			}
+		}
+		function rss_pi_tags_checkboxes($fid,$seleced_tags){
+			$tags = get_tags(array('hide_empty' => false));
+				if ($tags) {
+					$checkboxes .= "<ul>";
+					
+					foreach($tags as $tag) :
+					$strsel= "";
+						if(in_array($tag->term_id, $seleced_tags))
+							$strsel = "checked='checked'";
+							
+							$checkboxes .=
+							'<li><label for="tag-'.$tag->term_id.'">
+								<input type="checkbox" name="'.$fid.'-tags_id[]" value="'.$tag->term_id.'" id="tag-'.$tag->term_id.'" '.$strsel.' />'.$tag->name.'
+							</label></li>';
+					endforeach;	
+					$checkboxes .= "</ul>";					
+					print $checkboxes;
+				}
 		}
 }

@@ -10,7 +10,7 @@
                                 <table class="widefat edit-table">
                                         <tr>
                                                 <td>
-                                                        <label for="frequency"><?php _e('Frequency', "rss_pi"); ?></label>
+                                                   <label for="frequency"><?php _e('Frequency', "rss_pi"); ?></label>
                                                         <p class="description"><?php _e('How often will the import run.', "rss_pi"); ?></p>
                                                 </td>
                                                 <td>
