@@ -4,6 +4,15 @@
  *
  * @author Saurabh Shukla <saurabh@yapapaya.com>
  */
+ if ( !function_exists('download_url') ) {
+  require_once(ABSPATH.'/wp-admin/includes/file.php');
+};
+
+if ( !function_exists('media_handle_sideload') ) {
+  require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+  require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+  require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+};
 class rssPIFeaturedImage {
         
         /**
@@ -16,15 +25,47 @@ class rssPIFeaturedImage {
         function _set($item, $post_id) {
 
                 $content = $item->get_content() != "" ? $item->get_content() : $item->get_description();
+				
+				
+				// catch base url
+				preg_match('/href="(.+?)"/i', $content, $matches);
+				$baseref = (is_array($matches) && !empty($matches)) ? $matches[1] : '';                               
+				
+				// get the first image from content
+				preg_match('/<img.+?src="(.+?)"[^}]+>/i', $content, $matches);
+				$img_url = (is_array($matches) && !empty($matches)) ? $matches[1] : '';                               
+				
+				if (empty($img_url)) {
+				return false;
+				}                                                                      
+				
+				$img_host = parse_url($img_url, PHP_URL_HOST);                         
+				
+				if (empty($img_host)) {                                                
+				
+					if (empty($baseref)) {
+						return false;
+					};                                                                  
+				
+					$bc = parse_url($baseref);
+					$scheme = (empty($bc["scheme"])) ? "http" : $bc["scheme"];
+					$port = $bc["port"];
+					$host = $bc["host"];
+					if (empty($host)) {
+						return false;
+					};                                                        
+				
+					$img_url = $scheme . ":" . $port . "//" . $host . $img_url;
+				}
                 
                 // get the first image from content
-                preg_match('/<img.+?src="(.+?)"[^}]+>/i', $content, $matches);
+                /*preg_match('/<img.+?src="(.+?)"[^}]+>/i', $content, $matches);
                 $img_url = (is_array($matches) && !empty($matches)) ? $matches[1] : '';
 
                 if (empty($img_url)) {
                         return false;
                 }
-                
+                */
                 // sideload it
                 $featured_id = $this->_sideload($img_url, $post_id, '');
 

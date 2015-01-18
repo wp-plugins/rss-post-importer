@@ -321,6 +321,25 @@ class rssPIEngine {
                                     'post_date' => $item->get_date('Y-m-d H:i:s')
                                 );
 								
+								$content = $post["post_content"];                                                              
+
+							  // catch base url
+							  if (preg_match('/src="\//i', $content)) {
+								    preg_match('/href="(.+?)"/i', $content, $matches);
+									$baseref = (is_array($matches) && !empty($matches)) ? $matches[1] : '';
+										if (!empty($baseref)) {                                                                                             
+											 $bc = parse_url($baseref);
+											 $scheme = (empty($bc["scheme"])) ? "http" : $bc["scheme"];
+											 $port = $bc["port"];
+											 $host = $bc["host"];
+											 if (!empty($host)) {
+												$preurl = $scheme . ":" . $port . "//" . $host;
+												$post["post_content"] = preg_replace('/(src="\/)/i', 'src="' . $preurl . "/", $content);
+												}                                                                
+									}
+							  }
+								
+								
                                 // insert as post
                                 $post_id = $this->_insert($post, $item->get_permalink());
 
