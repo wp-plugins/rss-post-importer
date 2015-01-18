@@ -16,6 +16,8 @@ class rssPICron {
                 add_action('wp', array(&$this, 'schedule'));
 
                 add_action('rss_pi_cron', array(&$this, 'do_hourly'));
+				
+				
         }
 
         /**
@@ -37,5 +39,9 @@ class rssPICron {
                 $engine = new rssPIEngine();
                 $engine->import_feed();
         }
+		
+		
+		
 
+       
 }

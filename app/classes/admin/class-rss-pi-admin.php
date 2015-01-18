@@ -76,6 +76,9 @@ class rssPIAdmin {
 
                 // disable the feed author dropdown for invalid/absent API keys
                 add_filter('wp_dropdown_users', array($this, 'disable_user_dropdown'));
+				
+				// Add 10 minutes in frequency.
+				add_filter('cron_schedules', array($this, 'rss_pi_cron_add'));
         }
 
         /**
@@ -109,7 +112,13 @@ class rssPIAdmin {
                 );
                 wp_localize_script('rss-pi', 'rss_pi', $localise_args);
         }
-
+		function rss_pi_cron_add($schedules){
+            $schedules['minutes_10'] = array(
+                'interval' => 600,
+                'display'=> '10 minutes'
+                );
+            return $schedules;
+        }
         /**
          * Display the screen/ui
          */
