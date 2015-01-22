@@ -31,8 +31,17 @@ class rssPIFront {
          * Initialise and hook all actions
          */
         public function init() {
+				global $post,$rss_post_importer;
                 // add noidex to front
 				add_action('wp_head', array($this, 'rss_pi_noindex_meta_tag'));
+				
+				// add options
+				$this->options = $rss_post_importer->options;
+				
+				// Check for block indexing
+				if($this->options['settings']['nofollow_outbound'] == 'true'){
+					add_filter( 'the_content', array($this, 'rss_pi_url_parse'));
+				}
         }
 		
 		
@@ -61,6 +70,48 @@ class rssPIFront {
 					}
 				}
 			}
+		}
+		
+		
+		function rss_pi_url_parse( $content ) {
+
+			$regexp = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>";
+			if(preg_match_all("/$regexp/siU", $content, $matches, PREG_SET_ORDER)) {
+				if( !empty($matches) ) {
+					
+					$srcUrl = get_option('home');
+					for ($i=0; $i < count($matches); $i++)
+					{
+					
+						$tag = $matches[$i][0];
+						$tag2 = $matches[$i][0];
+						$url = $matches[$i][0];
+						
+						$noFollow = '';
+		
+						$pattern = '/target\s*=\s*"\s*_blank\s*"/';
+						preg_match($pattern, $tag2, $match, PREG_OFFSET_CAPTURE);
+						if( count($match) < 1 )
+							$noFollow .= ' target="_blank" ';
+							
+						$pattern = '/rel\s*=\s*"\s*[n|d]ofollow\s*"/';
+						preg_match($pattern, $tag2, $match, PREG_OFFSET_CAPTURE);
+						if( count($match) < 1 )
+							$noFollow .= ' rel="nofollow" ';
+					
+						$pos = strpos($url,$srcUrl);
+						if ($pos === false) {
+							$tag = rtrim ($tag,'>');
+							$tag .= $noFollow.'>';
+							$content = str_replace($tag2,$tag,$content);
+						}
+					}
+				}
+			}
+			
+			$content = str_replace(']]>', ']]&gt;', $content);
+			return $content;
+		
 		}
 		
 }

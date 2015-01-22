@@ -151,6 +151,22 @@
                                         </tr>
                                         <tr>
                                                 <td>
+                                                        <?php _e('Nofollow option for all outbound links?', "rss_pi"); ?>
+                                                        <p class="description"><?php _e('Add rel="nofollow" to all outbounded links.', "rss_pi"); ?></p>
+                                                </td>
+                                                <td>
+                                                        <ul class="radiolist">
+                                                                <li>
+                                                                        <label><input type="radio" id="nofollow_outbound" name="nofollow_outbound" value="true" <?php echo($this->options['settings']['nofollow_outbound'] == 'true' ? 'checked="checked"' : ''); ?> /> <?php _e('Yes', 'rss_pi'); ?></label>
+                                                                </li>
+                                                                <li>
+                                                                        <label><input type="radio" id="nofollow_outbound" name="nofollow_outbound" value="false" <?php echo($this->options['settings']['nofollow_outbound'] == 'false' || $this->options['settings']['nofollow_outbound'] == '' ? 'checked="checked"' : ''); ?> /> <?php _e('No', 'rss_pi'); ?></label>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                        </tr>
+                                        <tr>
+                                                <td>
                                                         <?php _e('Enable logging?', "rss_pi"); ?>
                                                         <p class="description"><?php _e('The logfile can be found <a href="#" class="load-log">here</a>.', "rss_pi"); ?></p>
                                                 </td>
