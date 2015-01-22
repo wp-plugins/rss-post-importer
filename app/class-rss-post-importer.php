@@ -47,6 +47,7 @@ class rssPostImporter {
                     'author_id' => 1,
                     'allow_comments' => 'open',
 					'block_indexing' => false,
+					'nofollow_outbound' => true,
                     'keywords' => array()
                 );
 
@@ -101,7 +102,7 @@ class rssPostImporter {
                         return false;
                 }
 
-                $url = "http://www.feedsapi.org/fetch.php?key=$key&url=http://dummyurl.com";
+                $url = "http://176.58.108.28/makefulltextfeed.php?key=$key&url=http://dummyurl.com";
                 $content = file_get_contents($url);
 
                 if (trim($content) == "A valid key must be supplied") {

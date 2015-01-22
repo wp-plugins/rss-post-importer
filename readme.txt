@@ -5,7 +5,7 @@ Tags: rss, feeds, import, feed, autoblog, feed aggregation, rss-feed, aggregatio
 RSSImport, yahoo pipes, WP Pipes, Import XML feed , FeedSyndicate, RSSpost, RSS in Page
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,11 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 1. This is the combined settings- and feed-management-screen.
 
 == Change Log ==
+
+= Version 2.0.6 =
+* nofollow option for outbound links.
+* Bug fixed($ sign not removing from content when feed importing)
+* Bug fixed and Improvements in code.
 
 = Version 2.0.5 =
 * Broken links to images solved.

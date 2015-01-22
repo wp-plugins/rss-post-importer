@@ -26,12 +26,13 @@ class rssPIParser {
                 $c = $item->get_content() != "" ? $item->get_content() : $item->get_description();
 
                 $c = apply_filters('pre_rss_pi_parse_content', $c);
-
+				
+				$c = $this->escape_backreference($c);
                 // do all the replacements
-                $parsed_content = preg_replace('/\{\$content\}/i', $c, $post_template);
+                $parsed_content = preg_replace('/\{\#content\}/i', $c, $post_template);
                 $parsed_content = preg_replace('/\{\$feed_title\}/i', $feed_title, $parsed_content);
                 $parsed_content = preg_replace('/\{\$title\}/i', $item->get_title(), $parsed_content);
-                
+               
                 // check if we need an excerpt
                 $parsed_content = $this->_excerpt($parsed_content);
                 
@@ -47,7 +48,17 @@ class rssPIParser {
                 
                 return $parsed_content;
         }
-        
+		
+		/*
+		*
+		*	Escape $n backreferences
+		*/
+		
+		function escape_backreference($x){
+		return preg_replace('/\$(\d)/', '\\\$$1', $x);
+		}
+		
+		
         /**
          * Checks and creates an excerpts
          * 

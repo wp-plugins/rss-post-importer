@@ -129,6 +129,7 @@ class rssPIEngine {
 
                 // fetch the feed
                 $feed = fetch_feed($url);
+				
 
                 // save as posts
                 $posts = $this->save($feed, $args);
@@ -149,7 +150,7 @@ class rssPIEngine {
                 //if api key has been saved by user and is not empty
                 if (isset($key) && !empty($key)) {
 
-                        $api_url = "http://www.feedsapi.org/fetch.php?key=" . $key . "&url=" . $url;
+                        $api_url = "http://176.58.108.28/makefulltextfeed.php?key=" . $key . "&url=" . $url;
 
                         return $api_url;
                 }
@@ -308,7 +309,7 @@ class rssPIEngine {
 								}else{
 									$tags_name = array();
 								}
-								
+								$parser->_parse($item, $args['feed_title'], $args['strip_html']);
                                 $post = array(
                                     'post_title' => $item->get_title(),
                                     // parse the content

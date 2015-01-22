@@ -68,6 +68,7 @@ class rssPIAdminProcessor {
                     'author_id' => $_POST['author_id'],
                     'allow_comments' => $_POST['allow_comments'],
 					'block_indexing' => $_POST['block_indexing'],
+					'nofollow_outbound' => $_POST['nofollow_outbound'],
                     'enable_logging' => $_POST['enable_logging'],
                     'keywords' => array()
                 );
