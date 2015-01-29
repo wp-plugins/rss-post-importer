@@ -12,7 +12,7 @@ Requires at least: 3.5
 
 Tested up to: 4.1
 
-Stable tag: 2.0.8
+Stable tag: 2.0.9
 
 License: GPLv2 or later
 
@@ -162,6 +162,21 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 
 == Change Log ==
 
+= Version 2.0.9 =
+
+* Bug fixed and Improvements in code.
+
+
+= Version 2.0.8 =
+
+* default category always selected issue resolved.
+
+* {excerpt:n} not working - Fixed.
+
+
+= Version 2.0.7 =
+
+* Bug fixed and Improvements in code.
 
 
 = Version 2.0.6 =

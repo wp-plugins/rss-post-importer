@@ -12,7 +12,7 @@
 
   Author: feedsapi
 
-  Version: 2.0.8
+  Version: 2.0.9
 
   Author URI: https://www.feedsapi.org/
 
@@ -58,7 +58,7 @@ if (!defined('RSS_PI_BASENAME')) {
 
 if (!defined('RSS_PI_VERSION')) {
 
-        define('RSS_PI_VERSION', '2.0.8');
+        define('RSS_PI_VERSION', '2.0.9');
 
 }
 
