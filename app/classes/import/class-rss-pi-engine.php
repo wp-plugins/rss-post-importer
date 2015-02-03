@@ -682,10 +682,15 @@ class rssPIEngine {
 
 								
 
-								
+    							//download images and save them locally if setting suggests so
+                               if($this->options['settings']['import_images_locally'] == "true") {
+                                    
+                                    $post = $this->download_images_locally($post); 
+                                    
+                               } 
+
 
                                 // insert as post
-
                                 $post_id = $this->_insert($post, $item->get_permalink());
 
 
@@ -693,7 +698,6 @@ class rssPIEngine {
                                 // set thumbnail
 
                                 $thumbnail->_set($item, $post_id);
-
 
 
                                 array_push($saved_posts, $post);
@@ -792,8 +796,6 @@ class rssPIEngine {
 
 
 
-
-
                 $post_id = wp_insert_post($_post);
 
 
@@ -810,6 +812,79 @@ class rssPIEngine {
 
         }
 
+        public function pre($arr) {
+
+            echo "<pre>";
+            print_r($arr);
+            echo "</pre>";
+        
+        }
+
+
+    function download_images_locally($post) {
+
+        $post_content = $post["post_content"];
+
+        // initializing DOMDocument to modify the img source 
+        $dom = new DOMDocument;  
+        libxml_use_internal_errors(true);
+        $dom->loadHTML( $post_content ); 
+        $xpath = new DOMXPath( $dom );
+        libxml_clear_errors();
+
+        //get all the src attribs and their values
+        $doc = $dom->getElementsByTagName("html")->item(0);
+        $src = $xpath->query(".//@src");
+
+        $count = 1;
+
+        foreach ( $src as $s ) {
+
+            $url             = trim($s->nodeValue); 
+            $attachment_id   = $this->add_to_media($url , 0 , $post["post_title"]."-media-".$count );
+            $src             = wp_get_attachment_url( $attachment_id );
+            $s->nodeValue    = $src;
+            $count++;
+
+        }
+
+        $post["post_content"] = $dom->saveXML( $doc );
+
+        return $post;
+    }
+
+    function add_to_media($url , $associated_with_post , $desc ) {
+
+        $tmp = download_url( $url );
+        $post_id = $associated_with_post;
+        $desc = $desc;
+        $file_array = array();
+
+        // Set variables for storage
+        // fix file filename for query strings
+        preg_match('/[^\?]+\.(jpg|jpe|jpeg|gif|png)/i', $url, $matches);
+        $file_array['name'] = basename($matches[0]);
+        $file_array['tmp_name'] = $tmp;
+
+        // If error storing temporarily, unlink
+        if ( is_wp_error( $tmp ) ) {
+            @unlink($file_array['tmp_name']);
+            return false;
+        }
+
+        // do the validation and storage stuff
+        $id = media_handle_sideload( $file_array, $post_id, $desc );
+
+        // If error storing permanently, unlink
+        if ( is_wp_error($id) ) {
+            @unlink($file_array['tmp_name']);
+            return false;
+        }
+
+
+        return $id ;
+
+    }
 
 
 }
