@@ -98,7 +98,9 @@ class rssPostImporter {
 
 					'nofollow_outbound' => true,
 
-                    'keywords' => array()
+                    'keywords' => array(),
+
+                    'import_images_locally' => false
 
                 );
 
@@ -249,6 +251,7 @@ class rssPostImporter {
                 return array_merge($settings_link, $links);
 
         }
+
 
 
 
