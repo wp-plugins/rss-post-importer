@@ -162,6 +162,12 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 
 == Change Log ==
 
+
+= Version 2.0.10 =
+
+* Added option to download images locally instead of hotlinking.
+
+
 = Version 2.0.9 =
 
 * Bug fixed and Improvements in code.
