@@ -12,7 +12,7 @@ Requires at least: 3.5
 
 Tested up to: 4.1
 
-Stable tag: 2.0.10
+Stable tag: 2.0.11
 
 License: GPLv2 or later
 
@@ -162,11 +162,13 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 
 == Change Log ==
 
+= Version 2.0.11 =
+
+* Changed API URL
 
 = Version 2.0.10 =
 
 * Added option to download images locally instead of hotlinking.
-
 
 = Version 2.0.9 =
 

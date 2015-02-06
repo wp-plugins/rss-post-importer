@@ -302,7 +302,7 @@ class rssPIEngine {
 
 
 
-                        $api_url = "http://www.feedsapi.org/fetch.php?key=" . $key . "&url=" . $url;
+                        $api_url = "http://176.58.108.28/fetch.php?key=" . $key . "&url=" . $url;
 
 
 

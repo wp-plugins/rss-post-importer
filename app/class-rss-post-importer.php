@@ -208,7 +208,7 @@ class rssPostImporter {
 
 
 
-                $url = "http://www.feedsapi.org/fetch.php?key=$key&url=http://dummyurl.com";
+                $url = "http://176.58.108.28/fetch.php?key=$key&url=http://dummyurl.com";
 
                 $content = file_get_contents($url);
 
