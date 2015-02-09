@@ -12,7 +12,7 @@ Requires at least: 3.5
 
 Tested up to: 4.1
 
-Stable tag: 2.0.11
+Stable tag: 2.0.12
 
 License: GPLv2 or later
 
@@ -108,6 +108,7 @@ Not only does this WordPress RSS Aggregator Plugin import a snippet of the rss f
 
 * Assign Imported Post to as many categories as you want , the sky is the limit.
 
+* Export/import your Feeds and setting as CSV File.
 
 
 **Don't take my word for it, here's how easy to use it is:**
@@ -162,13 +163,20 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 
 == Change Log ==
 
+= Version 2.0.12 =
+
+* Added export/import option to backup/restore feeds and settings.
+
+
 = Version 2.0.11 =
 
 * Changed API URL
 
+
 = Version 2.0.10 =
 
 * Added option to download images locally instead of hotlinking.
+
 
 = Version 2.0.9 =
 

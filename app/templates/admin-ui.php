@@ -3,7 +3,7 @@
                 
                 <h2><?php _e("Rss Post Importer Settings", 'rss_pi'); ?></h2>
                 
-                <form method="post" id="">
+                <form method="post" id=""  enctype="multipart/form-data">
                         
                         <input type="hidden" name="save_to_db" id="save_to_db" />
                         
