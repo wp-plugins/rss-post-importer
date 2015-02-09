@@ -74,9 +74,13 @@ class rssPIAdminProcessor {
 
                 // formulate the feeds array
 
-                $feeds = $this->process_feeds($ids);
+                $feeds = $this->process_feeds($ids);				
+				
 
+				// save and reload the options
 
+                $feeds = $this->import_csv($feeds);
+				
 
                 // save and reload the options
 
@@ -102,7 +106,61 @@ class rssPIAdminProcessor {
 
         }
 
+		/**
 
+         * Import CSV function to import CSV file data into database
+		 
+         * @return array
+
+         */
+
+        private function import_csv($feeds) {
+			
+			if(is_uploaded_file($_FILES['import_csv']['tmp_name'])) {
+					$file = $_FILES['import_csv']['tmp_name'];
+					$fcount = file($file);
+					$linescount = count($fcount)-1;
+					$file_handle = fopen($file,"r");
+					$t=0;
+					$titlearray = array();
+					while($csv_line = fgetcsv($file_handle,1024)) {
+						if($t <> 0)
+						{
+						
+							for ($i = 0, $j = count($csv_line); $i < $j; $i++) {
+								if($i == 0)
+									$importdata['feeds'][$t-1]['id'] = uniqid("54d4c".$t);
+								
+								$importdata['feeds'][$t-1][$titlearray[$i]] = $csv_line[$i];
+							
+							}
+						}
+						else{
+							for ($i = 0, $j = count($csv_line); $i < $j; $i++) {
+								$titlearray[] = $csv_line[$i];
+							}
+						}
+					$t++;
+					}
+					fclose($file_handle) or die("can't close file");
+					
+					
+					if(!empty($importdata['feeds']))
+					{
+						for($r=0;$r<count($importdata['feeds']);$r++)
+						{
+								$importdata['feeds'][$r]['category_id'] = array(1);
+								$importdata['feeds'][$r]['tags_id'] = "";
+								$importdata['feeds'][$r]['strip_html'] = "false";
+								
+								array_push($feeds,$importdata['feeds'][$r]);
+								
+						}
+					}
+				}
+				
+				return $feeds;
+		}
 
         /**
 

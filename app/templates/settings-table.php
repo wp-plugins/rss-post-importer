@@ -199,6 +199,40 @@
                                                 </td> 
                                
                                         </tr>
+                                        <?php
+										 if ($this->is_key_valid) {
+										?>
+                                        
+                                         <tr>
+                                                <td>
+                                                        <?php _e('Export and backup your Feeds and setting as CSV File', "rss_pi"); ?>
+                                                      <p class="description"><?php _e('This option will help you download a csv file with all your feeds setting , you can upload it back later.', "rss_pi"); ?></p>
+                                                </td>
+                                                <td>
+                                                      <input type="submit" value="Export your Feeds and Setting as CSV File" name="csv_download" class="button button-primary button-large right">     
+                                                </td> 
+                               
+                                        </tr>
+                                         <tr>
+                                                <td>
+                                                        <?php _e('Import your CSV file with your feeds settings', "rss_pi"); ?>
+                                                   <p class="description"><?php _e('Create and Import a CSV file with your Feeds Setting with the following Structure and heading:<br/>
+
+url , name, max_posts, author_id <br/>
+
+url = your feed url <br/>
+name = the name you gives to your feed <br/>
+max_posts = the number of posts to simultaneously import <br/>
+author_id = your author ID , this is a number.', "rss_pi"); ?></p>
+                                                </td>
+                                                <td>
+                                                      <input type="file" name="import_csv" />
+                                                </td> 
+                               
+                                        </tr>
+                                        <?php
+										 }
+										?>
                                 </table>
                         </td>
                 </tr>
