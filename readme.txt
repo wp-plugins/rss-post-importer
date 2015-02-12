@@ -12,7 +12,7 @@ Requires at least: 3.5
 
 Tested up to: 4.1
 
-Stable tag: 2.0.12
+Stable tag: 2.0.14
 
 License: GPLv2 or later
 
@@ -162,6 +162,15 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 
 
 == Change Log ==
+
+= Version 2.0.14 =
+
+* Added option to import/export settings
+
+
+= Version 2.0.13 =
+
+* Bug Fixing - API related
 
 = Version 2.0.12 =
 

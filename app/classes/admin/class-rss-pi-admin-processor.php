@@ -124,15 +124,16 @@ class rssPIAdminProcessor {
 					$t=0;
 					$titlearray = array();
 					while($csv_line = fgetcsv($file_handle,1024)) {
+						
 						if($t <> 0)
 						{
 						
 							for ($i = 0, $j = count($csv_line); $i < $j; $i++) {
 								if($i == 0)
 									$importdata['feeds'][$t-1]['id'] = uniqid("54d4c".$t);
-								
+									
 								$importdata['feeds'][$t-1][$titlearray[$i]] = $csv_line[$i];
-							
+								
 							}
 						}
 						else{
@@ -153,13 +154,39 @@ class rssPIAdminProcessor {
 								$importdata['feeds'][$r]['tags_id'] = "";
 								$importdata['feeds'][$r]['strip_html'] = "false";
 								
+								$check_result = $this->check_feed_exist($feeds,$importdata['feeds'][$r]);
+								
+								if($check_result){
+									
+									unset($importdata['feeds'][$r]);
+									
+								}
+								else{
 								array_push($feeds,$importdata['feeds'][$r]);
+								}
 								
 						}
+						
 					}
 				}
 				
 				return $feeds;
+		}
+		
+		function check_feed_exist($feeds,$csvlink){
+			if(!empty($feeds) && !empty($csvlink)){
+				
+				for($g=0;$g<count($feeds);$g++)
+				{
+					
+					if($feeds[$g]['url'] == $csvlink['url'])
+					{
+						
+						return true;
+					}
+				}
+				return false;
+			}
 		}
 
         /**
