@@ -21,6 +21,7 @@
                                                 <?php
                                                 include_once RSS_PI_PATH. 'app/templates/feed-table.php';
                                                 include_once RSS_PI_PATH. 'app/templates/settings-table.php';
+                                                include_once RSS_PI_PATH. 'app/templates/stats.php';
                                                 ?>
                                         </div>
 

@@ -103,9 +103,20 @@ class rssPIAdmin {
                 }
 
                 // register scripts & styles
-                wp_enqueue_script('rss-pi', RSS_PI_URL . 'app/assets/js/main.js', array('jquery'), RSS_PI_VERSION);
                 wp_enqueue_style('rss-pi', RSS_PI_URL . 'app/assets/css/style.css', array(), RSS_PI_VERSION);
 
+                wp_enqueue_style('rss-pi-jquery-ui-css',
+                'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/smoothness/jquery-ui.css',
+                false,
+                RSS_PI_VERSION,
+                false);
+
+                wp_enqueue_script( 'jquery-ui-core' );
+                
+                wp_enqueue_script( 'jquery-ui-datepicker' );
+                
+                wp_enqueue_script('rss-pi', RSS_PI_URL . 'app/assets/js/main.js', array('jquery'), RSS_PI_VERSION);
+                
                 // localise ajaxuel for use
                 $localise_args = array(
                     'ajaxurl' => admin_url('admin-ajax.php')
@@ -266,7 +277,7 @@ class rssPIAdmin {
 		function rss_pi_tags_checkboxes($fid,$seleced_tags){
 			$tags = get_tags(array('hide_empty' => false));
 				if ($tags) {
-					$checkboxes .= "<ul>";
+					$checkboxes = "<ul>";
 					
 					foreach($tags as $tag) :
 					$strsel= "";

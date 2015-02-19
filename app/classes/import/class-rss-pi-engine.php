@@ -600,7 +600,7 @@ class rssPIEngine {
 
                 foreach ($items as $item) {
 
-                        if (!$this->post_exists($item->get_permalink())) {
+                        if (!$this->post_exists($item)) {
 
 								/* Code to convert tags id array to tag name array **/
 
@@ -648,13 +648,13 @@ class rssPIEngine {
 
 								$content = $post["post_content"];                                                              
 
+                              // Added header for UTF-8 encoding for imported feeds characters
+                              header( 'Content-Type: text/html; charset=UTF-8' );
+							  
+                              // catch base url
+							  if (preg_match('/src="\//ui', $content)) {
 
-
-							  // catch base url
-
-							  if (preg_match('/src="\//i', $content)) {
-
-								    preg_match('/href="(.+?)"/i', $content, $matches);
+								    preg_match('/href="(.+?)"/ui', $content, $matches);
 
 									$baseref = (is_array($matches) && !empty($matches)) ? $matches[1] : '';
 
@@ -690,13 +690,14 @@ class rssPIEngine {
                                } 
 
 
+                               //elminatins unnecessary characterss
+                               //$post["post_content"] = str_replace("Â", "", $post["post_content"]);
+
                                 // insert as post
                                 $post_id = $this->_insert($post, $item->get_permalink());
 
 
-
                                 // set thumbnail
-
                                 $thumbnail->_set($item, $post_id);
 
 
@@ -726,32 +727,55 @@ class rssPIEngine {
 
          */
 
-        private function post_exists($permalink) {
+        private function post_exists($item) {
+
+            global $wpdb;
+
+            $permalink  = $item->get_permalink();
+            $title      = $item->get_title();
+            $domain_old = $this->get_domain($item->get_permalink());
+            
+            $post_exists = 0; 
+
+            //checking if post title already exists
+            if( $posts = $wpdb->get_results("SELECT ID  FROM ".$wpdb->prefix."posts WHERE post_title = '" . $title . "' and post_status = 'publish' ", 'ARRAY_A') ) {
+
+                //checking if post source is also same 
+                foreach($posts as $post) {
+
+                    $post_id    = $post["ID"];
+                    $source_url = get_post_meta($post_id , "rss_pi_source_url" , true);
+                    $domain_new = $this->get_domain($source_url);
+                    
+                    if($domain_new == $domain_old) {
+                        $post_exists = 1;
+                    }
+
+                }
+
+            }
+
+            //check if the post has already been imported and then deleted 
+            $rss_pi_imported_posts = get_option("rss_pi_imported_posts");
+
+            if(in_array( $permalink , $rss_pi_imported_posts)) {
+                $post_exists = 1;
+            }
 
 
+            return $post_exists;
 
-                // get all posts where the meta is stored
+        }  
 
-                $args = array(
+        private function get_domain($url){
 
-                    'post_status' => 'any',
-
-                    'meta_key' => 'rss_pi_source_url',
-
-                    'meta_value' => esc_url($permalink)
-
-                );
-
-
-
-                $posts = get_posts($args);
-
-
-
-                // Not already imported
-
-                return(count($posts) > 0);
-
+          $pieces = parse_url($url);
+          $domain = isset($pieces['host']) ? $pieces['host'] : '';
+          if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)) {
+            return $regs['domain'];
+          }
+          return false;
+        
         }
 
 
@@ -807,6 +831,14 @@ class rssPIEngine {
                 add_post_meta($post_id, 'rss_pi_source_url', esc_url($url));
 
 
+                //saving each post URL in option table 
+                $rss_pi_imported_posts = get_option("rss_pi_imported_posts");
+                if( !is_array($rss_pi_imported_posts) ) {
+                    $rss_pi_imported_posts = array();
+                }
+                $rss_pi_imported_posts[] = $url; 
+                update_option( "rss_pi_imported_posts" , $rss_pi_imported_posts );
+
 
                 return $post_id;
 
@@ -856,6 +888,7 @@ class rssPIEngine {
     function add_to_media($url , $associated_with_post , $desc ) {
 
         $tmp = download_url( $url );
+
         $post_id = $associated_with_post;
         $desc = $desc;
         $file_array = array();
@@ -885,6 +918,8 @@ class rssPIEngine {
         return $id ;
 
     }
+
+
 
 
 }

@@ -323,9 +323,9 @@ class rssPIAdminProcessor {
 
                                     'author_id' => $this->is_key_valid ? $_POST[$id . '-author_id'] : $_POST['author_id'],
 
-                                    'category_id' => $_POST[$id . '-category_id'],
+                                    'category_id' => (isset($_POST[$id . '-category_id']))? $_POST[$id . '-category_id'] : "" ,
 
-									'tags_id' => $_POST[$id . '-tags_id'],
+									'tags_id' => (isset($_POST[$id . '-tags_id']))? $_POST[$id . '-tags_id'] : "",
 
                                     'strip_html' => $_POST[$id . '-strip_html']
 

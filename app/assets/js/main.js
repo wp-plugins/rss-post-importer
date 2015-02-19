@@ -72,6 +72,9 @@ jQuery('document').ready(function(){
 		return false;
 	});
 	
+	jQuery("#from_date" ).datepicker();
+	jQuery("#till_date" ).datepicker();
+
 });
 
 function update_ids()
