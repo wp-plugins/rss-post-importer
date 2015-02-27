@@ -52,34 +52,20 @@ if(!class_exists("Rss_pi_stats")) {
 			      google.setOnLoadCallback(drawChart);
 
 			      function drawChart() {
-
-			      	<?php 
-				      	if( isset($feeds["feeds"]) && is_array($feeds["feeds"]) ) {
-
-
-					      	$this->draw_line_charts_js($line_feeds_data , $feeds ); 
-					      	$this->draw_pie_chart_js($pie_feeds_data , $feeds ); 
-					      	$this->draw_bar_chart_js($bar_feeds_data , $feeds ); 
-
-				      	}
-			      	?>
+			      	<?php $this->draw_line_charts_js($line_feeds_data , $feeds ); ?>
+			      	<?php $this->draw_pie_chart_js($pie_feeds_data , $feeds ); ?>
+			      	<?php $this->draw_bar_chart_js($bar_feeds_data , $feeds ); ?>
 
 
 			      }
 
 			      </script>
-				  
- 				  <?php
-	 				if( isset($feeds["feeds"]) && is_array($feeds["feeds"]) ) {
-		 				$this->show_date_pickers();
-					    echo '<div class="rss_pi_stat_div" id="rsspi_chart_line" style=""></div>';
-					    echo '<div class="rss_pi_stat_div" id="rsspi_chart_pie"  style=""></div>';
-					    echo '<div class="rss_pi_stat_div" id="rsspi_chart_bar"  style=""></div>';
-				   	}
-				   	else {
-				   		echo "<div class='rss_no_data_available'>No data avaibale to be shown.</div>";
-				   	}
- 				  ?>
+
+ 				  <?php $this->show_date_pickers();?>
+			      <div class="rss_pi_stat_div" id="rsspi_chart_line" style=""></div>
+			      <div class="rss_pi_stat_div" id="rsspi_chart_pie"  style=""></div>
+			      <div class="rss_pi_stat_div" id="rsspi_chart_bar"  style=""></div>
+
 			<?php
 
 
@@ -98,21 +84,16 @@ if(!class_exists("Rss_pi_stats")) {
 
 			$data = array();
 			
-			if(isset($feeds["feeds"]) && is_array($feeds["feeds"])) {
+			foreach($feeds["feeds"] as $feed) {
+				$feedname = $feed["name"];
+				$feedurl = $feed["url"];
+				foreach($dates as $date) {
 
-				foreach($feeds["feeds"] as $feed) {
-					$feedname = $feed["name"];
-					$feedurl = $feed["url"];
-					foreach($dates as $date) {
+					$key = date("d-m-Y", $date);
+					$data[$key][$feedname] = $this->get_feedcount_for($feedurl , $date );
 
-						$key = date("d-m-Y", $date);
-						$data[$key][$feedname] = $this->get_feedcount_for($feedurl , $date );
-
-					}
 				}
-			
 			}
-
 
 			return $data;
 
@@ -211,7 +192,6 @@ if(!class_exists("Rss_pi_stats")) {
 				<?php
 
 					$feednames = "";
-
 					foreach($feeds["feeds"] as $feed ) {
 						$feednames .= "'".$feed["name"]."', ";
 					}
@@ -302,44 +282,41 @@ if(!class_exists("Rss_pi_stats")) {
 			$data 		= array();
 			
 			//pre($feeds); exit;
-			if(isset($feeds["feeds"]) && is_array($feeds["feeds"])) {
+			foreach($feeds["feeds"] as $feed) {
+				
+				$data[$feed["name"]] = 0; 
+				
+				$domain = $this->get_domain($feed["url"]);
+				
 
-				foreach($feeds["feeds"] as $feed) {
-					
-					$data[$feed["name"]] = 0; 
-					
-					$domain = $this->get_domain($feed["url"]);
-					
+				$args = array(
+								"date_query" => array( 
+														"after" => array(
+																		"year" 	=> $s_year,
+																		"month" => $s_month,
+																		"day" 	=> $s_day,
+																		),														
+														"before" => array(
+																		"year" 	=> $e_year,
+																		"month" => $e_month,
+																		"day" 	=> $e_day,
+																		),
+														'inclusive' => true,
 
-					$args = array(
-									"date_query" => array( 
-															"after" => array(
-																			"year" 	=> $s_year,
-																			"month" => $s_month,
-																			"day" 	=> $s_day,
-																			),														
-															"before" => array(
-																			"year" 	=> $e_year,
-																			"month" => $e_month,
-																			"day" 	=> $e_day,
-																			),
-															'inclusive' => true,
-
+														),
+								'meta_query' 		=> array(
+															array(
+																'key'     => "rss_pi_source_url",
+																'value'   => $domain,
+																'compare' => 'LIKE',
 															),
-									'meta_query' 		=> array(
-																array(
-																	'key'     => "rss_pi_source_url",
-																	'value'   => $domain,
-																	'compare' => 'LIKE',
-																),
-															),
+														),
 
-									'posts_per_page' => -1,
-								);
+								'posts_per_page' => -1,
+							);
 
-					$posts = get_posts($args);
-					$data[$feed["name"]] = count($posts);
-				}
+				$posts = get_posts($args);
+				$data[$feed["name"]] = count($posts);
 			}
 
 			return $data;		 
@@ -425,8 +402,8 @@ if(!class_exists("Rss_pi_stats")) {
 			<div class="rss_pi_stats_date">
 				<div class="rss_filter_heading">Filter results:</div>
 				<hr>
-				<label>From: <input type="text" id="from_date" name="rss_from_date" value="<?php echo  (isset($_POST["rss_from_date"]))? $_POST["rss_from_date"] : "";  ?>" /> </label> 
-				<label>Till: <input type="text" id="till_date" name="rss_till_date" value="<?php echo (isset($_POST["rss_till_date"]))? $_POST["rss_till_date"] : "";  ?>" /> </label> 
+				<label>From: <input type="text" id="from_date" name="rss_from_date" value=<?php echo  (isset($_POST["rss_from_date"]))? $_POST["rss_from_date"] : "";  ?> /> </label> 
+				<label>Till: <input type="text" id="till_date" name="rss_till_date" value=<?php echo (isset($_POST["rss_till_date"]))? $_POST["rss_till_date"] : "";  ?> /> </label> 
 				<input type="submit" name="rss_filter_stats" class="button button-primary button-large " value="Filter">
 				<br>
 			</div>

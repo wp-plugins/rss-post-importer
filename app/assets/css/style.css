@@ -84,8 +84,3 @@ div.category_container,div.tags_container{
 .rss_filter_heading {
   font-weight: bold;
 }
-
-.rss_no_data_available {
-  padding: 20px;
-  text-align: center;
-}

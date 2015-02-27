@@ -648,8 +648,8 @@ class rssPIEngine {
 
 								$content = $post["post_content"];                                                              
 
-                              // Added header for UTF-8 encoding for imported feeds characters
-                              header( 'Content-Type: text/html; charset=UTF-8' );
+//                              // Added header for UTF-8 encoding for imported feeds characters
+//                              header( 'Content-Type: text/html; charset=UTF-8' );
 							  
                               // catch base url
 							  if (preg_match('/src="\//ui', $content)) {
@@ -758,7 +758,7 @@ class rssPIEngine {
             //check if the post has already been imported and then deleted 
             $rss_pi_imported_posts = get_option("rss_pi_imported_posts");
 
-            if(in_array( $permalink , $rss_pi_imported_posts)) {
+            if(is_array($rss_pi_imported_posts) && in_array( $permalink , $rss_pi_imported_posts)) {
                 $post_exists = 1;
             }
 
@@ -860,7 +860,7 @@ class rssPIEngine {
         // initializing DOMDocument to modify the img source 
         $dom = new DOMDocument;  
         libxml_use_internal_errors(true);
-        $dom->loadHTML( $post_content ); 
+        $dom->loadHTML( '<?xml encoding="utf-8" ?>'.$post_content ); 
         $xpath = new DOMXPath( $dom );
         libxml_clear_errors();
 

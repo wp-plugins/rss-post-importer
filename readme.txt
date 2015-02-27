@@ -12,7 +12,7 @@ Requires at least: 3.5
 
 Tested up to: 4.1
 
-Stable tag: 2.0.16
+Stable tag: 2.0.17
 
 License: GPLv2 or later
 
@@ -165,8 +165,11 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 
 = Version 2.0.16 =
 
+ * Fixed encoding issue
+
+= Version 2.0.16 =
+
 * Added advanced stats 
-* Fixed encoding issues
 
 
 = Version 2.0.15 =
