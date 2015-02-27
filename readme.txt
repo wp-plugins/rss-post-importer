@@ -84,6 +84,7 @@ Not only does this WordPress RSS Aggregator Plugin import a snippet of the rss f
 
 * Block search indexing to prevent your content from appearing in search results.
 
+* **Advanced Statistics**: Piechart for feeds items distribution , Bar charts for posts and much more advanced charts
 
 
 **Premium Features include:**
@@ -163,9 +164,9 @@ WP-o-Matic , WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS
 
 == Change Log ==
 
-= Version 2.0.16 =
+= Version 2.0.17 =
+ * Bug Fixing: Encoding Bugs for Arabic, Russian, German and other languages and special characters fixed
 
- * Fixed encoding issue
 
 = Version 2.0.16 =
 
