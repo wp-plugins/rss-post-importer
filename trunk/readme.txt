@@ -96,12 +96,12 @@ WP-o-Matic, WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS 
 == Change Log ==
 
 = Version 2.1.0 =
-Ajax implementation
-Feeds Level Keywords Filters
-Feeds Level RegEx Filters
-Insanely faster
-Improvement of the Charts
-Disable Duplicated Featured Images for specific templates
+ * Ajax implementation
+ * Feeds Level Keywords Filters
+ * Feeds Level RegEx Filters
+ * Insanely faster
+ * Improvement of the Charts
+ * Disable Duplicated Featured Images for specific templates
 
 = Version 2.0.17 =
  * Bug Fixing: Encoding Bugs for Arabic, Russian, German and other languages and special characters fixed
