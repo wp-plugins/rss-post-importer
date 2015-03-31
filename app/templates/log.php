@@ -15,7 +15,7 @@
 				<a href="#" class="button button-large button-primary show-main-ui"><?php _e("Ok, all done", "rss_pi"); ?></a> 
 				<a href="#" class="button button-large button-warning clear-log"><?php _e("Clear log", "rss_pi"); ?></a> 
 				<div class="log">
-					<code><?php echo(wpautop( $log, true )); ?></code>
+					<code><?php echo(wpautop($log, true)); ?></code>
 				</div>
 			</div>
 		</div>
