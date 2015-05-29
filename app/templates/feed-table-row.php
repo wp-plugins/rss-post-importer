@@ -3,7 +3,7 @@ $show = '';
 
 if (!isset($f)) {
 	$f = array(
-		'id' => uniqid(),
+		'id' => 0,
 		'name' => 'New feed',
 		'url' => '',
 		'max_posts' => 5,
@@ -12,8 +12,7 @@ if (!isset($f)) {
 		'tags_id' => array(),
 		'strip_html' => 'false'
 	);
-
-	$show = 'show';
+	$show = ' show';
 }
 
 if (is_array($f['tags_id'])) {
@@ -37,9 +36,6 @@ if (is_array($f['tags_id'])) {
 	}
 }
 
-/* echo "<pre>";
-  print_r($f);
-  exit; */
 if (is_array($f['category_id'])) {
 	foreach ($f['category_id'] as $cat) {
 		$catarray[] = get_cat_name($cat);
@@ -56,25 +52,25 @@ if (is_array($f['category_id'])) {
 }
 ?>
 
-<tr id="display_<?php echo ($f['id']); ?>" class="data-row <?php echo $show; ?>">
-	<td>
-		<strong><a href="#" class="toggle-edit" data-target="<?php echo ($f['id']); ?>"><?php echo $f['name']; ?></a></strong>
+<tr id="display_<?php echo ($f['id']); ?>" class="data-row<?php echo $show; ?>" data-fields="name,url,max_posts">
+	<td class="rss_pi-feed_name">
+		<strong><a href="#" class="toggle-edit" data-target="<?php echo ($f['id']); ?>"><span class="field-name"><?php echo $f['name']; ?></span></a></strong>
 		<div class="row-options">
 			<a href="#" class="toggle-edit" data-target="<?php echo ($f['id']); ?>"><?php _e('Edit', 'rss_pi'); ?></a> | 
 			<a href="#" class="delete-row" data-target="<?php echo ($f['id']); ?>"><?php _e('Delete', 'rss_pi'); ?></a>
 		</div>
 	</td>
-	<td><?php echo $f['url']; ?></td>
-	<td><?php echo $f['max_posts']; ?></td>
+	<td class="rss_pi-feed_url"><span class="field-url"><?php echo $f['url']; ?></span></td>
+	<td class="rss_pi_feed_max_posts"><span class="field-max_posts"><?php echo $f['max_posts']; ?></span></td>
    <!-- <td width="20%"><?php //echo $category;  ?></td>-->
 </tr>
-<tr id="edit_<?php echo ($f['id']); ?>" class="edit-row <?php echo $show; ?>">
+<tr id="edit_<?php echo ($f['id']); ?>" class="edit-row<?php echo $show; ?>">
 	<td colspan="4">
 		<table class="widefat edit-table">
 			<tr>
 				<td><label for="<?php echo ($f['id']); ?>-name"><?php _e("Feed name", 'rss_pi'); ?></label></td>
 				<td>
-					<input type="text" name="<?php echo ($f['id']); ?>-name" id="<?php echo ($f['id']); ?>-name" value="<?php echo ($f['name']); ?>" />
+					<input type="text" class="field-name" name="<?php echo ($f['id']); ?>-name" id="<?php echo ($f['id']); ?>-name" value="<?php echo ($f['name']); ?>" />
 				</td>
 			</tr>
 			<tr>
@@ -82,18 +78,17 @@ if (is_array($f['category_id'])) {
 					<label for="<?php echo ($f['id']); ?>-url"><?php _e("Feed url", 'rss_pi'); ?></label>
 					<p class="description">e.g. "http://news.google.com/?output=rss"</p>
 				</td>
-				<td><input type="text" name="<?php echo ($f['id']); ?>-url" id="<?php echo ($f['id']); ?>-url" value="<?php echo ($f['url']); ?>" /></td>
+				<td><input type="text" class="field-url" name="<?php echo ($f['id']); ?>-url" id="<?php echo ($f['id']); ?>-url" value="<?php echo ($f['url']); ?>" /></td>
 			</tr>
 			<tr>
-				<td><label for=""><?php _e("Max posts / import", 'rss_pi'); ?></label></td>
-				<td><input type="number" name="<?php echo ($f['id']); ?>-max_posts" id="<?php echo ($f['id']); ?>-max_posts" value="<?php echo ($f['max_posts']); ?>" min="1" max="100" /></td>
+				<td><label for="<?php echo ($f['id']); ?>-max_posts"><?php _e("Max posts / import", 'rss_pi'); ?></label></td>
+				<td><input type="number" class="field-max_posts" name="<?php echo ($f['id']); ?>-max_posts" id="<?php echo ($f['id']); ?>-max_posts" value="<?php echo ($f['max_posts']); ?>" min="1" max="100" /></td>
 			</tr>
 			<tr>
-				<td><label for=""><?php _e("Feed Author", 'rss_pi'); ?></label></td>
+				<td><label for="<?php echo ($f['id']); ?>-author_id"><?php _e("Feed Author", 'rss_pi'); ?></label></td>
 				<td>
 <?php
 if (!$this->is_key_valid) {
-//	$this->key_error($this->key_prompt, true);
 	$this->key_error( sprintf( $this->key_prompt, '', 'http://www.feedsapi.com/?utm_source=rsspostimporter&utm_medium=upgrade&utm_term=feed-author&utm_content=rsspi-full-rss-key-here&utm_campaign=wordpress' ), true );
 }
 $args = array(
@@ -113,7 +108,6 @@ wp_dropdown_users($args);
 					$rss_post_pi_admin = new rssPIAdmin();
 					$disabled = '';
 					if (!$this->is_key_valid) {
-//						$this->key_error($this->key_prompt_multiple_category, true);
 						$this->key_error( sprintf( $this->key_prompt, 'Multiple Category selection available. ', 'http://www.feedsapi.com/?utm_source=rsspostimporter&utm_medium=upgrade&utm_term=multi-category&utm_content=rsspi-full-rss-key-here&utm_campaign=wordpress' ), true );
 						wp_dropdown_categories(array('hide_empty' => 0, 'hierarchical' => true, 'id' => $f['id'] . '-category_id', 'name' => $f['id'] . '-category_id', 'selected' => $f['category_id'][0]));
 					} else {
@@ -138,7 +132,6 @@ wp_dropdown_users($args);
 						<?php
 					$disabled = '';
 					if (!$this->is_key_valid) {
-//						$this->key_error($this->key_prompt_multiple_tags, true);
 						$this->key_error( sprintf( $this->key_prompt, 'Multiple Tags selection available. ', 'http://www.feedsapi.com/?utm_source=rsspostimporter&utm_medium=upgrade&utm_term=multi-tags-free&utm_content=rsspi-full-rss-key-here&utm_campaign=wordpress' ), true );
 						echo $rss_post_pi_admin->rss_pi_tags_dropdown($f['id'], $f['tags_id']);
 					} else {
@@ -165,7 +158,6 @@ wp_dropdown_users($args);
 					$disabled = '';
 					if (!$this->is_key_valid) {
 						$disabled = ' disabled="disabled"';
-//						$this->key_error($this->key_prompt, true);
 						$this->key_error( sprintf( $this->key_prompt, '', 'http://www.feedsapi.com/?utm_source=rsspostimporter&utm_medium=upgrade&utm_term=keywords-filters&utm_content=rsspi-full-rss-key-here&utm_campaign=wordpress' ), true );
 					}
 					?>
@@ -189,7 +181,7 @@ wp_dropdown_users($args);
 			</tr>
 			<tr>
 				<td><input type="hidden" name="id" value="<?php echo($f['id']); ?>" /></td>
-				<td><a id="close-edit-table" class="button button-large toggle-edit" data-target="<?php echo ($f['id']); ?>"><?php _e('Close', 'rss_pi'); ?></a></td>
+				<td><a id="close-edit-table-<?php echo($f['id']); ?>" class="button button-large toggle-edit" data-target="<?php echo ($f['id']); ?>"><?php _e('Close', 'rss_pi'); ?></a></td>
 			</tr>
 		</table>
 

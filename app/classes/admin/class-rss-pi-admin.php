@@ -3,7 +3,7 @@
 /**
  * The class that handles the admin screen
  *
- * @author saurabhshukla
+ * @author mobilova UG (haftungsbeschränkt) <rsspostimporter@feedsapi.com>
  */
 class rssPIAdmin {
 
@@ -37,12 +37,7 @@ class rssPIAdmin {
 		$this->load_options();
 
 		// add a key prompt
-//		$this->key_prompt = __('You need a <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">Full Text RSS Key</a> to activate this section, please <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">get one and try it free</a> for the next 14 days to see how it goes.', 'rss_pi');
 		$this->key_prompt = __('%1$sYou need a <a href="%2$s" target="_blank">Full Text RSS Key</a> to activate this section, please <a href="%2$s" target="_blank">get one and try it free</a> for the next 14 days to see how it goes.', 'rss_pi');
-
-		// now OBSOLETE as of 2.0.18
-		$this->key_prompt_multiple_category = __('Multiple Category selection available.You need a <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">Full Text RSS Key</a> to activate this section, please <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">get one and try it free</a> for the next 14 days to see how it goes.', 'rss_pi');
-		$this->key_prompt_multiple_tags = __('Multiple Tags selection available.You need a <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">Full Text RSS Key</a> to activate this section, please <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank">get one and try it free</a> for the next 14 days to see how it goes.', 'rss_pi');
 
 		// initialise logging
 		$this->log = new rssPILog();
@@ -70,17 +65,18 @@ class rssPIAdmin {
 				unset($this->options['settings']['feeds_api_key']);
 			}
 			// update options
-			update_option('rss_pi_feeds', array(
+			$new_options = array(
 				'feeds' => $this->options['feeds'],
 				'settings' => $this->options['settings'],
 				'latest_import' => $this->options['latest_import'],
-				'imports' => $this->options['imports']
-			));
+				'imports' => $this->options['imports'],
+				'upgraded' => $this->options['upgraded']
+			);
+			// update in db
+			update_option('rss_pi_feeds', $new_options);
 		} else {
 			$this->is_key_valid = $this->options['settings']['is_key_valid'];
 		}
-		// use our cached key validity
-//		$this->is_key_valid = isset($this->options['settings']['is_key_valid']) ? $this->options['settings']['is_key_valid'] : false;
 	}
 
 	/**
@@ -96,6 +92,11 @@ class rssPIAdmin {
 
 		// load scripts and styles we need
 		add_action('admin_enqueue_scripts', array($this, 'enqueue'));
+
+		// manage meta data on post deletion and restoring
+		add_action('wp_trash_post', array($this, 'delete_post')); // trashing a post
+		add_action('before_delete_post', array($this, 'delete_post')); // deleting a post permanently
+		add_action('untrash_post', array($this, 'restore_post')); // restoring a post from trash
 
 		// the ajax for adding new feeds (table rows)
 		add_action('wp_ajax_rss_pi_add_row', array($this, 'add_row'));
@@ -137,22 +138,47 @@ class rssPIAdmin {
 		// register scripts & styles
 		wp_enqueue_style('rss-pi', RSS_PI_URL . 'app/assets/css/style.css', array(), RSS_PI_VERSION);
 
-//		wp_enqueue_style('rss-pi-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/smoothness/jquery-ui.css', false, RSS_PI_VERSION, false);
-		wp_enqueue_style('rss-pi-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/redmond/jquery-ui.css', false, RSS_PI_VERSION, false);
+		wp_enqueue_style('rss-pi-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/themes/redmond/jquery-ui.css', array(), RSS_PI_VERSION);
 
 		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery-ui-datepicker');
-		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery-ui-progressbar');
 
-		wp_enqueue_script('rss-pi', RSS_PI_URL . 'app/assets/js/main.js', array('jquery'), RSS_PI_VERSION);
+		wp_enqueue_script('modernizr', RSS_PI_URL . 'app/assets/js/modernizr.custom.32882.js', array(), RSS_PI_VERSION, true);
+		wp_enqueue_script('phpjs-uniqid', RSS_PI_URL . 'app/assets/js/uniqid.js', array(), RSS_PI_VERSION, true);
+		wp_enqueue_script('rss-pi', RSS_PI_URL . 'app/assets/js/main.js', array('jquery'), RSS_PI_VERSION, true);
 
 		// localise ajaxuel for use
 		$localise_args = array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
-			'pluginurl' => RSS_PI_URL
+			'pluginurl' => RSS_PI_URL,
+			'l18n' => array(
+				'unsaved' => __( 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?', 'rss_pi' )
+			)
 		);
 		wp_localize_script('rss-pi', 'rss_pi', $localise_args);
+	}
+
+	// add post URL to rss_pi_deleted_posts when trashing
+	function delete_post($post_id) {
+		$rss_pi_deleted_posts = get_option( 'rss_pi_deleted_posts', array() );
+		$source_md5 = get_post_meta($post_id, 'rss_pi_source_md5', true);
+		if ( $source_md5 && ! in_array( $source_md5, $rss_pi_deleted_posts ) ) {
+			// add this source URL hash to the "deleted" metadata
+			$rss_pi_deleted_posts[] = $source_md5;
+			update_option('rss_pi_deleted_posts', $rss_pi_deleted_posts);
+		}
+	}
+
+	// remove post URL from rss_pi_deleted_posts when restoring from trash
+	function restore_post($post_id) {
+		$rss_pi_deleted_posts = get_option( 'rss_pi_deleted_posts', array() );
+		$source_md5 = get_post_meta($post_id, 'rss_pi_source_md5', true);
+		if ( $source_md5 && in_array( $source_md5, $rss_pi_deleted_posts ) ) {
+			// remove this source URL hash from the "deleted" metadata
+			$rss_pi_deleted_posts = array_diff( $rss_pi_deleted_posts, array( $source_md5 ) );
+			update_option('rss_pi_deleted_posts', $rss_pi_deleted_posts);
+		}
 	}
 
 	function rss_pi_cron_add($schedules) {
@@ -171,6 +197,11 @@ class rssPIAdmin {
 
 		// load the form processor
 		$this->processor->process();
+
+		if ( $this->is_key_valid ) {
+			// purge "deleted posts" cache when requested
+			$this->processor->purge_deleted_posts_cache();
+		}
 	}
 
 	/**
@@ -179,10 +210,15 @@ class rssPIAdmin {
 	function screen() {
 
 		// display a success message
-		if( isset($_GET['settings-updated']) || isset($_GET['invalid_api_key']) || isset($_GET['import']) && $_GET['settings-updated'] ) {
+		if( isset($_GET['deleted_cache_purged']) || isset($_GET['settings-updated']) || isset($_GET['invalid_api_key']) || isset($_GET['import']) && $_GET['settings-updated'] ) {
 ?>
 		<div id="message" class="updated">
 <?php
+			if( isset($_GET['deleted_cache_purged']) && $_GET['deleted_cache_purged'] == 'true' ) {
+?>
+			<p><strong><?php _e('Cache for Deleted posts was purged.') ?></strong></p>
+<?php
+			}
 			if( isset($_GET['settings-updated']) && $_GET['settings-updated'] ) {
 ?>
 			<p><strong><?php _e('Settings saved.') ?></strong></p>
@@ -204,13 +240,16 @@ class rssPIAdmin {
 <?php
 $ids = array();
 if ( is_array($this->options['feeds']) ) :
-//	$ids = array_keys($this->options['feeds'])
 	foreach ($this->options['feeds'] as $f) :
 		$ids[] = $f['id'];
 	endforeach;
 endif;
 ?>
-feeds.set(<?php echo json_encode($ids); ?>);
+if (feeds !== undefined) {
+	feeds.set(<?php echo json_encode($ids); ?>);
+}  else {
+	var feeds = <?php echo json_encode($ids); ?>;
+}
 </script>
 <?php
 			}
@@ -234,9 +273,6 @@ feeds.set(<?php echo json_encode($ids); ?>);
 		</div>
 <?php
 		}
-
-		// load the form processor first
-//		$this->processor->process();
 
 		// it'll process any submitted form data
 		// reload the options just in case
@@ -285,12 +321,6 @@ feeds.set(<?php echo json_encode($ids); ?>);
 	function ajax_import() {
 		global $rss_post_importer;
 
-//		$imported = $this->processor->import();
-//		wp_send_json_success(array('imported'=>$imported));
-
-//		$engine = new rssPIEngine();
-//		$imported = $engine->import_feed();
-
 		// if there's nothing for processing or invalid data, bail
 		if ( ! isset($_POST['feed']) ) {
 			wp_send_json_error(array('message'=>'no feed provided'));
@@ -318,12 +348,15 @@ feeds.set(<?php echo json_encode($ids); ?>);
 				unset($this->options['settings']['feeds_api_key']);
 			}
 			// update options
-			update_option('rss_pi_feeds', array(
+			$new_options = array(
 				'feeds' => $this->options['feeds'],
 				'settings' => $this->options['settings'],
 				'latest_import' => $this->options['latest_import'],
-				'imports' => $this->options['imports']
-			));
+				'imports' => $this->options['imports'],
+				'upgraded' => $this->options['upgraded']
+			);
+			// update in db
+			update_option('rss_pi_feeds', $new_options);
 		}
 
 		$post_count = 0;
@@ -335,7 +368,8 @@ feeds.set(<?php echo json_encode($ids); ?>);
 		// filter cache lifetime
 		add_filter('wp_feed_cache_transient_lifetime', array($engine, 'frequency'));
 
-		if ( $items = $engine->prepare_import($f) ) {
+		// prepare, import feed and count imported posts
+		if ( $items = $engine->do_import($f) ) {
 			$post_count += count($items);
 		}
 
@@ -345,12 +379,15 @@ feeds.set(<?php echo json_encode($ids); ?>);
 		$imports = intval($this->options['imports']) + $post_count;
 
 		// update options
-		update_option('rss_pi_feeds', array(
+		$new_options = array(
 			'feeds' => $this->options['feeds'],
 			'settings' => $this->options['settings'],
 			'latest_import' => date("Y-m-d H:i:s"),
-			'imports' => $imports
-		));
+			'imports' => $imports,
+			'upgraded' => $this->options['upgraded']
+		);
+		// update in db
+		update_option('rss_pi_feeds', $new_options);
 
 		global $rss_post_importer;
 		// reload options

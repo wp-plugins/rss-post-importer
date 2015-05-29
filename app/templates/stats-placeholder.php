@@ -1,4 +1,4 @@
-<table class="widefat rss_pi-table" id="rss_pi-table">
+<table class="widefat rss_pi-table" id="rss_pi-stats-table">
 	<thead>
 		<tr>
 			<th><?php _e('Stats', 'rss_pi'); ?></th>

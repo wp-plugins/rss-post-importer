@@ -6,7 +6,7 @@
 		<div id="rss_pi_progressbar"></div>
 		<div id="rss_pi_progressbar_label"></div>
 
-		<form method="post" id=""  enctype="multipart/form-data" action="<?php echo $rss_post_importer->page_link; ?>">
+		<form method="post" id="rss_pi-settings-form"  enctype="multipart/form-data" action="<?php echo $rss_post_importer->page_link; ?>">
 
 			<input type="hidden" name="save_to_db" id="save_to_db" />
 

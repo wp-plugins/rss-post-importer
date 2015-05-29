@@ -1,8 +1,9 @@
 <?php
-/*
+
+/**
  * Calculates and shows graphical stats
  *
- * @author Pramod Jodhani<mrpramodjodhani@gmail.com>
+ * @author mobilova UG (haftungsbeschränkt) <rsspostimporter@feedsapi.com>
  */
 if (!class_exists("Rss_pi_stats")) {
 
@@ -17,6 +18,9 @@ if (!class_exists("Rss_pi_stats")) {
 //				echo 'No Stats';
 				?>
 				<div class="rss_pi_stat_message">Sorry, there are no imported posts to show stats for.</div>
+				<script type="text/javascript">
+					function drawChart() {}
+				</script>
 				<?php
 				return;
 			}
@@ -271,7 +275,6 @@ function drawChart() {};
 
 		function draw_pie_chart_js($pie_feeds_data, $feeds) {
 
-			//$data_pie = get_pie_data();
 			?>
 			var data_pie_chart = google.visualization.arrayToDataTable([ 
 			<?php
@@ -308,7 +311,6 @@ function drawChart() {};
 
 			$data = array();
 
-			//pre($feeds); exit;
 			foreach ($feeds["feeds"] as $feed) {
 
 				$data[$feed["name"]] = 0;
@@ -421,8 +423,8 @@ function drawChart() {};
 			<div class="rss_pi_stats_date">
 				<div class="rss_filter_heading">Filter results:</div>
 				<hr>
-				<label>From: <input type="text" id="from_date" name="rss_from_date" value=<?php echo (isset($_POST["rss_from_date"])) ? $_POST["rss_from_date"] : ""; ?> /> </label> 
-				<label>Till: <input type="text" id="till_date" name="rss_till_date" value=<?php echo (isset($_POST["rss_till_date"])) ? $_POST["rss_till_date"] : ""; ?> /> </label> 
+				<label>From: <input type="text" id="from_date" name="rss_from_date" value="<?php echo (isset($_POST["rss_from_date"])) ? $_POST["rss_from_date"] : ""; ?>" /> </label> 
+				<label>Till: <input type="text" id="till_date" name="rss_till_date" value="<?php echo (isset($_POST["rss_till_date"])) ? $_POST["rss_till_date"] : ""; ?>" /> </label> 
 				<input type="submit" id="submit-rss_filter_stats" name="rss_filter_stats" class="button button-primary button-large " value="Filter">
 				<br>
 			</div>

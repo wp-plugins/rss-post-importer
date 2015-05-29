@@ -3,7 +3,7 @@
 /**
  * Sets a featured image
  *
- * @author Saurabh Shukla <saurabh@yapapaya.com>
+ * @author mobilova UG (haftungsbeschränkt) <rsspostimporter@feedsapi.com>
  */
 if (!function_exists('download_url')) {
 	require_once(ABSPATH . '/wp-admin/includes/file.php');
@@ -46,17 +46,17 @@ class rssPIFeaturedImage {
 
 			if (empty($baseref)) {
 				return false;
-			};
+			}
 
 			$bc = parse_url($baseref);
-			$scheme = (empty($bc["scheme"])) ? "http" : $bc["scheme"];
-			$port = $bc["port"];
+			$scheme = (!isset($bc["scheme"]) || empty($bc["scheme"])) ? 'http' : $bc["scheme"];
 			$host = $bc["host"];
+			$port = (isset($bc["port"]) && empty($bc["port"])) ? ':' . $bc["port"] : '';
 			if (empty($host)) {
 				return false;
-			};
+			}
 
-			$img_url = $scheme . ":" . $port . "//" . $host . $img_url;
+			$img_url = $scheme . '://' . $host . $port . $img_url;
 		}
 
 		// get the first image from content
@@ -101,7 +101,7 @@ class rssPIFeaturedImage {
 			$file_array['name'] = basename($file);
 
 			// Download file to temp location.
-			$file_array['tmp_name'] = download_url($file);
+			$file_array['tmp_name'] = @download_url($file);
 
 			// If error storing temporarily, return the error.
 			if (is_wp_error($file_array['tmp_name'])) {

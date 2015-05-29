@@ -3,8 +3,8 @@ Contributors: feedsapi
 Donate link: https://www.feedsapi.org/
 Tags: rss, feeds, import, feed, autoblog, feed aggregation, rss-feed, aggregation, atom, feed, rss, syndication, FeedWordPress, autoblog aggregator, Autoblogger, autoblogging,  feed import, rss multi importer, feed reader, feed to post, multi feed import, multi feed importer, multi import, multi rss feeds, multiple feed import, multiple feeds, multiple rss feeds, rss, rss aggregator, rss feader, RSS import, rss to post, content curation, RSS Retriever, RSS fetch feed, WP RSS Aggregator, AutoPost, RSS Feed to Post, RSSImport, yahoo pipes, WP Pipes, Import XML feed , FeedSyndicate, RSSpost, RSS in Page
 Requires at least: 3.5
-Tested up to: 4.1
-Stable tag: 2.1.1
+Tested up to: 4.2.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,10 @@ Not only does this WordPress RSS Aggregator Plugin import a snippet of the rss f
 * Assign Imported Posts to as many Tags as you want , the sky is the limit.
 * Assign Imported Post to as many categories as you want , the sky is the limit.
 * Export/import your Feeds and setting as CSV File.
+* Disable Banner for a valid Full Text RSS Key
+* Purge Deleted Posts from the Memory to re-import old posts
+* Option to re-import the same articles several times and disable the protection
+* Import Static Websites Content. **Supports: html or php single page or single article **
 
 **Don't take my word for it, here's how easy to use it is:**
 
@@ -72,7 +76,7 @@ When you start importing rss feeds as a part of your content backup, autobloggin
 
 **PS**: By the way, this RSS Aggregator plugin is not a shortcode for just displaying a bunch of links from an rss feeds like some of the following plugins: 
 
-WP-o-Matic, WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS Just Better, CyberSyn, CSV 2 Post, Simple Feed Copyright, WP Syndicate, HungryFEED, WP Pipes and many other I can't list here. **RSS Post Importer imports data from a feed and saves it as full stand alone posts.**
+WP-o-Matic, WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS Just Better, CyberSyn, CSV 2 Post, Simple Feed Copyright, WP Syndicate, HungryFEED, Feedzy , WP Pipes and many other I can't list here. **RSS Post Importer imports data from a feed and saves it as full stand alone posts.**
 
 
 == Installation ==
@@ -86,6 +90,30 @@ WP-o-Matic, WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS 
 
 [vimeo https://vimeo.com/113134777]
 
+== Frequently Asked Questions ==
+
+= I've already installed RSS Post Importer, but not all features are enable, what's going on? =
+
+RSS Post Importer requires a Full Text RSS Key [Try it Free for 14 Days](http://www.feedsapi.org/register.htm?utm_source=rss-post-importer_upgrade-free-trial) to enable all premium features. It comes with a 14 day free trial and will save you several hours of manual work.
+
+= How do I upgrade RSS Post Importer? =
+
+You need a Full Text RSS Key to upgrade your RSS Post Importer Plugin and boost your traffic and revenues, you simply need to go to [Boost my Traffic](http://www.feedsapi.org/register.htm?utm_source=rss-post-importer_upgrade) and create a premium account , then use the key you receive with your RSS Post Importer 
+
+= How do I view my stats? =
+
+Once you've installed RSS Post Importer, your stats will be available via the "Setting" menu which appears in the RSS Post Importer "Stats" block UI  (under the RSS Post Importer settings block).
+
+= How do I contribute to RSS Post Importer? =
+
+Easy! There are opportunities for developers and non-developers at all levels to contribute:
+
+* Join our Beta Test group.
+* Give us a hand answering questions in our [support forum](https://wordpress.org/support/plugin/rss-post-importer).
+* Report bugs, with reproduction steps, to [Support](rsspostimporter@feedsapi.com).
+
+Learn more (and get detailed instructions) in our [contribute guide](http://jetpack.me/contribute/).
+
 
 == Screenshots ==
 
@@ -94,6 +122,15 @@ WP-o-Matic, WP-o-Matic, RSSImport, FeedWordPress, Syndicate Press, FeedWeb, RSS 
 
 
 == Change Log ==
+
+= Version 2.1.2 =
+ * Interactive Feedback when adding/editing new feeds
+ * Disable Banner for Premium users
+ * Option to purge deleted posts from the memory, so you can re-import deleted posts.
+ * Import/Export Feeds + Feeds Settings as CSV file
+ * Improved Charts and Statistics
+ * Option to Import already imported or deleted Posts
+ * Several code improvements & Bug fixes for better stability
 
 = Version 2.1.1 =
  * Jquery Bug fix

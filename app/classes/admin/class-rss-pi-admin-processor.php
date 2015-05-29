@@ -3,7 +3,7 @@
 /**
  * Processes the admin screen form submissions
  *
- * @author Saurabh Shukla <saurabh@yapapaya.com>
+ * @author mobilova UG (haftungsbeschränkt) <rsspostimporter@feedsapi.com>
  */
 class rssPIAdminProcessor {
 
@@ -44,28 +44,50 @@ class rssPIAdminProcessor {
 		$feeds = $this->process_feeds($ids);
 
 		// import settings
-		if (isset($_FILES['import_csv']))
+		if ( isset($_FILES['import_csv']) && $settings['is_key_valid'] ) {
 			$feeds = $this->import_csv($feeds);
+		}
 
 		// save and reload the options
 		$this->save_reload_options($settings, $feeds);
 
-//		// check if we need to and import feeds
-//		$imported = $this->import();
-
 		global $rss_post_importer;
 
-//		wp_redirect(add_query_arg(array('settings-updated'=>'true','imported'=>$imported),$rss_post_importer->page_link));
-//		wp_redirect(add_query_arg(array('settings-updated'=>'true','import'=>($_POST['save_to_db']=='true')),$rss_post_importer->page_link));
 		wp_redirect(add_query_arg(
 			array(
 				'settings-updated' => 'true',
+				// yield the routine for import feeds via AJAX when needed
 				'import' => ( $_POST['save_to_db'] == 'true' ),
 				'message' => $invalid_api_key ? 2 : 1
 			),
 			$rss_post_importer->page_link
 		));
 		exit;
+	}
+
+	/**
+	 * Purge "deleted_posts" cache from wp_options
+	 * @return void
+	 */
+	function purge_deleted_posts_cache() {
+
+		if (isset($_POST['purge_deleted_cache'])) {
+
+			delete_option('rss_pi_deleted_posts');
+			delete_option('rss_pi_imported_posts');
+
+			global $rss_post_importer;
+
+			wp_redirect(add_query_arg(
+				array(
+					'deleted_cache_purged' => 'true',
+				),
+				$rss_post_importer->page_link
+			));
+			exit;
+
+		}
+
 	}
 
 	/**
@@ -104,15 +126,21 @@ class rssPIAdminProcessor {
 
 			if (!empty($importdata['feeds'])) {
 				for ($r = 0; $r < count($importdata['feeds']); $r++) {
-					$importdata['feeds'][$r]['category_id'] = array(1);
-					$importdata['feeds'][$r]['tags_id'] = "";
-					$importdata['feeds'][$r]['keywords'] = "";
-					$importdata['feeds'][$r]['strip_html'] = "false";
+					if ( isset($importdata['feeds'][$r]['category_id']) ) {
+						$importdata['feeds'][$r]['category_id'] = explode(',',$importdata['feeds'][$r]['category_id']);
+						$importdata['feeds'][$r]['tags_id'] = explode(',',$importdata['feeds'][$r]['tags_id']);
+						$importdata['feeds'][$r]['keywords'] = explode(',',$importdata['feeds'][$r]['keywords']);
+						$importdata['feeds'][$r]['strip_html'] = $importdata['feeds'][$r]['strip_html']; // this is a STRING, not a BOOLEAN
+					} else {
+						$importdata['feeds'][$r]['category_id'] = array(1);
+						$importdata['feeds'][$r]['tags_id'] = "";
+						$importdata['feeds'][$r]['keywords'] = "";
+						$importdata['feeds'][$r]['strip_html'] = "false";
+					}
 
 					$check_result = $this->check_feed_exist($feeds, $importdata['feeds'][$r]);
 
 					if ($check_result) {
-
 						unset($importdata['feeds'][$r]);
 					} else {
 						array_push($feeds, $importdata['feeds'][$r]);
@@ -160,7 +188,9 @@ class rssPIAdminProcessor {
 			'enable_logging' => $_POST['enable_logging'],
 			'import_images_locally' => $_POST['import_images_locally'],
 			'disable_thumbnail' => $_POST['disable_thumbnail'],
-			'keywords' => array()
+			// these values are setup after key_validity check via filter()
+			'keywords' => array(),
+			'cache_deleted' => 'true',
 		);
 
 		global $rss_post_importer;
@@ -250,7 +280,8 @@ class rssPIAdminProcessor {
 			'feeds' => $feeds,
 			'settings' => $settings,
 			'latest_import' => $options['latest_import'],
-			'imports' => $options['imports']
+			'imports' => $options['imports'],
+			'upgraded' => $options['upgraded']
 		);
 
 		// update in db
@@ -258,25 +289,6 @@ class rssPIAdminProcessor {
 
 		// reload so that the new options are used henceforth
 		$rss_post_importer->load_options();
-	}
-
-	/**
-	 * Import feeds
-	 * 
-	 * @return null
-	 */
-	private function import() {
-
-		// if we don't need to import anything, bail
-		if ($_POST['save_to_db'] != 'true') {
-			return;
-		}
-
-		// initialise the engine and import
-		$engine = new rssPIEngine();
-		$imported = $engine->import_feed();
-
-		return $imported;
 	}
 
 	/**
@@ -308,6 +320,10 @@ class rssPIAdminProcessor {
 				$keywords = explode(',', $keyword_str);
 			}
 			$settings['keywords'] = array_map('trim',$keywords);
+
+			// set up "import deleted posts" (otherwise don't)
+			$settings['cache_deleted'] = isset($_POST['cache_deleted']) ? $_POST['cache_deleted'] : 'true';
+			
 		}
 
 		return $settings;
