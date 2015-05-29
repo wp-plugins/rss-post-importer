@@ -3,7 +3,7 @@
 /**
  * Manipulates log files
  *
- * @author Saurabh Shukla <saurabh@yapapaya.com>
+ * @author mobilova UG (haftungsbeschränkt) <rsspostimporter@feedsapi.com>
  */
 class rssPILog {
 

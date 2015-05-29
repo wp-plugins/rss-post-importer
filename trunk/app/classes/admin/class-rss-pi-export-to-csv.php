@@ -11,17 +11,22 @@ function array2csv(array &$array) {
 	}
 	ob_start();
 	$df = fopen("php://output", 'w');
-	$arrayhead = array_keys(reset($array));
-	$exclude_data = array('id', 'category_id', 'tags_id', 'strip_html');
-	$arrayhead = array_diff($arrayhead, array('id', 'category_id', 'tags_id', 'strip_html'));
+	reset($array);
+	$arrayhead = array_keys($array[0]);
+	$include_data = array( 'url', 'name', 'max_posts', 'author_id', 'strip_html' );
+	$include_data_arrays = array( 'category_id', 'tags_id', 'keywords' );
+	$include_data = array_merge( $include_data, $include_data_arrays );
+	$arrayhead = array_intersect( $arrayhead, $include_data );
 
 	fputcsv($df, $arrayhead);
 
-	foreach ($array as $row) {
-		unset($row['id']);
-		unset($row['category_id']);
-		unset($row['tags_id']);
-		unset($row['strip_html']);
+	foreach ( $array as $row ) {
+		$row = array_intersect_key( $row, array_flip($include_data) );
+		foreach ( $row as $key => $value ) {
+			if ( in_array( $key, $include_data_arrays ) ) {
+				$row[$key] = implode(',',$value);
+			}
+		}
 		fputcsv($df, $row);
 	}
 	fclose($df);
@@ -47,7 +52,7 @@ function download_send_headers($filename) {
 	header("Content-Transfer-Encoding: binary");
 }
 
-if (isset($_POST['csv_download'])) {
+if ( isset($_POST['csv_download']) && $options['settings']['is_key_valid'] ) {
 
 	download_send_headers("data_export_" . date("Y-m-d") . ".csv");
 	echo array2csv($options['feeds']);

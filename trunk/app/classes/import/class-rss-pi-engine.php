@@ -3,7 +3,7 @@
 /**
  * Main import engine
  *
- * @author Saurabh Shukla <saurabh@yapapaya.com>
+ * @author mobilova UG (haftungsbeschränkt) <rsspostimporter@feedsapi.com>
  */
 class rssPIEngine {
 
@@ -59,17 +59,21 @@ class rssPIEngine {
 					unset($this->options['settings']['feeds_api_key']);
 				}
 				// update options
-				update_option('rss_pi_feeds', array(
+				$new_options = array(
 					'feeds' => $this->options['feeds'],
 					'settings' => $this->options['settings'],
 					'latest_import' => $this->options['latest_import'],
-					'imports' => $this->options['imports']
-				));
+					'imports' => $this->options['imports'],
+					'upgraded' => $this->options['upgraded']
+				);
+				// update in db
+				update_option('rss_pi_feeds', $new_options);
 			}
 
-			// prepare and import each feed
-			$items = $this->prepare_import($f);
-			$post_count += count($items);
+			// prepare, import feed and count imported posts
+			if ( $items = $this->do_import($f) ) {
+				$post_count += count($items);
+			}
 		}
 
 		// reformulate import count
@@ -110,7 +114,7 @@ class rssPIEngine {
 	 * @param array $f feed array
 	 * @return array
 	 */
-	public function prepare_import($f) {
+	public function do_import($f) {
 
 		$args = array(
 			'feed_title' => $f['name'],
@@ -160,6 +164,10 @@ class rssPIEngine {
 		// fetch the feed
 		$feed = fetch_feed($url);
 
+		if (is_wp_error($feed)) {
+			return false;
+		}
+
 		// save as posts
 		$posts = $this->save($feed, $args);
 
@@ -196,9 +204,6 @@ class rssPIEngine {
 	 */
 	private function save($feed, $args = array()) {
 
-		if (is_wp_error($feed)) {
-			return false;
-		}
 		// filter the feed and get feed items
 		$feed_items = $this->filter($feed, $args);
 
@@ -405,32 +410,56 @@ class rssPIEngine {
 
 		global $wpdb;
 		$permalink = $item->get_permalink();
-		$title = $item->get_title();
-		$domain_old = $this->get_domain($item->get_permalink());
+		$permalink_md5 = md5($permalink);
+		$post_exists = FALSE;
 
-		$post_exists = 0;
-		//checking if post title already exists
-		if ($posts = $wpdb->get_results("SELECT ID  FROM " . $wpdb->prefix . "posts WHERE post_title = '" . $title . "' and post_status = 'publish' ", 'ARRAY_A')) {
-			//checking if post source is also same 
-			foreach ($posts as $post) {
-				$post_id = $post['ID'];
-				$source_url = get_post_meta($post_id, 'rss_pi_source_url', true);
-				$domain_new = $this->get_domain($source_url);
+		if ( isset($this->options['upgraded']['deleted_posts']) ) { // database migrated
+			// check if there is a post with this source URL
+			$posts = $wpdb->get_results( $wpdb->prepare( "SELECT meta_id FROM {$wpdb->postmeta} WHERE meta_key = 'rss_pi_source_md5' and meta_value = %s", $permalink_md5 ), 'ARRAY_A');
+			if ( count($posts) ) {
+				$post_exists = TRUE;
+			}
+		} else {
+			// do it the old fashion way
+			$title = $item->get_title();
+			$domain_old = $this->get_domain($permalink);
 
-				if ($domain_new == $domain_old) {
-					$post_exists = 1;
+			//checking if post title already exists
+			if ($posts = $wpdb->get_results("SELECT ID FROM " . $wpdb->prefix . "posts WHERE post_title = '" . $title . "' and post_status = 'publish' ", 'ARRAY_A')) {
+				//checking if post source is also same 
+				foreach ($posts as $post) {
+					$post_id = $post['ID'];
+					$source_url = get_post_meta($post_id, 'rss_pi_source_url', true);
+					$domain_new = $this->get_domain($source_url);
+
+					if ($domain_new == $domain_old) {
+						$post_exists = TRUE;
+					}
 				}
 			}
 		}
-		//check if the post has already been imported and then deleted 
-		$rss_pi_imported_posts = get_option('rss_pi_imported_posts');
-		if (is_array($rss_pi_imported_posts) && in_array($permalink, $rss_pi_imported_posts)) {
-			$post_exists = 1;
+
+		if ( ! $post_exists && $this->options['settings']['cache_deleted'] == 'true' ) {
+
+			// check if the post has been imported and then deleted
+			if ( $this->options['upgraded']['deleted_posts'] ) { // database migrated
+				$rss_pi_deleted_posts = get_option( 'rss_pi_deleted_posts', array() );
+				if ( in_array( $permalink_md5, $rss_pi_deleted_posts ) ) {
+					$post_exists = TRUE;
+				}
+			} else {
+				//do it the old fashion way
+				$rss_pi_imported_posts = get_option( 'rss_pi_imported_posts', array() );
+				if ( in_array( $permalink, $rss_pi_imported_posts ) ) {
+					$post_exists = TRUE;
+				}
+			}
 		}
 
 		return $post_exists;
 	}
 
+	// deprecated as of 2.1.2
 	private function get_domain($url) {
 
 		$pieces = parse_url($url);
@@ -465,15 +494,9 @@ class rssPIEngine {
 
 		add_action('save_rss_pi_post', $post_id);
 
-		add_post_meta($post_id, 'rss_pi_source_url', esc_url($url));
-
-		//saving each post URL in option table 
-		$rss_pi_imported_posts = get_option('rss_pi_imported_posts');
-		if (!is_array($rss_pi_imported_posts)) {
-			$rss_pi_imported_posts = array();
-		}
-		$rss_pi_imported_posts[] = $url;
-		update_option('rss_pi_imported_posts', $rss_pi_imported_posts);
+		$url_md5 = md5($url);
+		update_post_meta($post_id, 'rss_pi_source_url', esc_url($url));
+		update_post_meta($post_id, 'rss_pi_source_md5', $url_md5);
 
 		return $post_id;
 	}

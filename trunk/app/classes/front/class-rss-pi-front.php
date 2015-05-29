@@ -3,7 +3,7 @@
 /**
  * The class that handles the front screen
  *
- * 
+ * @author mobilova UG (haftungsbeschränkt) <rsspostimporter@feedsapi.com>
  */
 class rssPIFront {
 

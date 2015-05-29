@@ -5,7 +5,7 @@
   Plugin URI: https://wordpress.org/plugins/rss-post-importer/
   Description: This plugin lets you set up an import posts from one or several rss-feeds and save them as posts on your site, simple and flexible.
   Author: feedsapi
-  Version: 2.1.0
+  Version: 2.1.2
   Author URI: https://www.feedsapi.org/
   License: GPLv2 or later
   License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,7 +27,7 @@ if (!defined('RSS_PI_BASENAME')) {
 }
 
 if (!defined('RSS_PI_VERSION')) {
-	define('RSS_PI_VERSION', '2.1.0');
+	define('RSS_PI_VERSION', '2.1.2');
 }
 
 if (!defined('RSS_PI_LOG_PATH')) {
@@ -42,6 +42,7 @@ if (!is_dir(RSS_PI_LOG_PATH)) {
 include_once RSS_PI_PATH . 'app/classes/helpers/class-rss-pi-log.php';
 include_once RSS_PI_PATH . 'app/classes/helpers/class-rss-pi-featured-image.php';
 include_once RSS_PI_PATH . 'app/classes/helpers/class-rss-pi-parser.php';
+include_once RSS_PI_PATH . 'app/classes/helpers/rss-pi-functions.php';
 
 // admin classes
 include_once RSS_PI_PATH . 'app/classes/admin/class-rss-pi-admin-processor.php';

@@ -1,4 +1,4 @@
-<table class="widefat rss_pi-table" id="rss_pi-table">
+<table class="widefat rss_pi-table" id="rss_pi-feed-table">
 	<thead>
 		<tr>
 			<th><?php _e("Feed name", 'rss_pi'); ?></th>
@@ -15,7 +15,6 @@
 			foreach ($this->options['feeds'] as $f) :
 				$category = get_the_category($f['category_id']);
 				array_push($saved_ids, $f['id']);
-
 				include( RSS_PI_PATH . 'app/templates/feed-table-row.php');
 			endforeach;
 		else :
@@ -38,5 +37,13 @@
 				<input type="hidden" name="ids" id="ids" value="<?php echo(join($saved_ids, ',')); ?>" />
 			</td>
 		</tr>
+<?php
+		// preload an empty (and hidden by css) "new feed" row
+		unset($f);
+		include( RSS_PI_PATH . 'app/templates/feed-table-row.php');
+?>
 	</tfoot>
 </table>
+<style>
+.rss_pi-table tfoot tr.data-row,.rss_pi-table tfoot tr.edit-row{display:none;}
+</style>

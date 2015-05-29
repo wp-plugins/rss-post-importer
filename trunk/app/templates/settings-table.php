@@ -1,4 +1,4 @@
-<table class="widefat rss_pi-table" id="rss_pi-table">
+<table class="widefat rss_pi-table" id="rss_pi-settings-table">
 	<thead>
 		<tr>
 			<th colspan="5"><?php _e('Settings', 'rss_pi'); ?></th>
@@ -28,10 +28,12 @@
 					<tr>
 						<td>
 							<label for="feeds_api_key"><?php _e('Full Text RSS Feed API Key', "rss_pi"); ?></label>
+							<?php if ( ! $this->is_key_valid ) : ?>
 							<p class="description">
 								<?php _e('Boost Your traffic with Full RSS Content - ', "rss_pi"); ?> 
 								Request a Free 14 Days <a href="http://www.feedsapi.com/?utm_source=rsspi-full-rss-key-here" target="_blank"> Full RSS Key Here !</a> 
 							</p>
+							<?php endif; ?>
 						</td>
 						<td>
 							<?php $feeds_api_key = isset($this->options['settings']["feeds_api_key"]) ? $this->options['settings']["feeds_api_key"] : ""; ?>
@@ -79,7 +81,6 @@
 							$disabled = '';
 							if (!$this->is_key_valid) {
 								$disabled = ' disabled="disabled"';
-//								$this->key_error($this->key_prompt, true);
 								$this->key_error( sprintf( $this->key_prompt, '', 'http://www.feedsapi.com/?utm_source=rsspostimporter&utm_medium=upgrade&utm_term=keywords-filters&utm_content=rsspi-full-rss-key-here&utm_campaign=wordpress' ), true );
 							}
 							?>
@@ -214,40 +215,94 @@
 							</ul>
 						</td> 
 					</tr>
-					<?php
-					if ($this->is_key_valid) {
-						?>
-
-						<tr>
-							<td>
-								<?php _e('Export and backup your Feeds and setting as CSV File', "rss_pi"); ?>
-								<p class="description"><?php _e('This option will help you download a csv file with all your feeds setting , you can upload it back later.', "rss_pi"); ?></p>
-							</td>
-							<td>
-								<input type="submit" value="Export your Feeds and Setting as CSV File" name="csv_download" class="button button-primary button-large right">     
-							</td> 
-
-						</tr>
-						<tr>
-							<td>
-								<?php _e('Import your CSV file with your feeds settings', "rss_pi"); ?>
-								<p class="description"><?php _e('Create and Import a CSV file with your Feeds Setting with the following Structure and heading:<br/>
-
-url , name, max_posts, author_id <br/>
-
-url = your feed url <br/>
-name = the name you gives to your feed <br/>
-max_posts = the number of posts to simultaneously import <br/>
-author_id = your author ID , this is a number.', "rss_pi"); ?></p>
-							</td>
-							<td>
-								<input type="file" name="import_csv" />
-							</td> 
-
-						</tr>
+					<tr>
+						<td>
+							<?php _e('Import already deleted posts?', "rss_pi"); ?>
+							<p class="description"><?php _e('Allow imported and later deleted posts to be imported once again.', "rss_pi"); ?></p>
+						</td>
+						<td>
+							<?php
+							$disabled = '';
+							if (!$this->is_key_valid) {
+								$disabled = ' disabled="disabled"';
+								$this->key_error( sprintf( $this->key_prompt, '', 'http://www.feedsapi.com/?utm_source=rsspostimporter&utm_medium=upgrade&utm_term=import-deleted&utm_content=rsspi-full-rss-key-here&utm_campaign=wordpress' ), true );
+							}
+							?>
+							<ul class="radiolist">
+								<li>
+									<label class="tooltips"><input type="radio" id="cache_deleted_true" name="cache_deleted" value="false" <?php echo($this->options['settings']['cache_deleted'] == 'false' ? 'checked="checked"' : ''); ?><?php echo $disabled; ?> /> <?php _e('Yes', 'rss_pi'); ?></label>
+								</li>
+								<li>
+									<label><input type="radio" id="cache_deleted_false" name="cache_deleted" value="true" <?php echo($this->options['settings']['cache_deleted'] == 'true' || $this->options['settings']['cache_deleted'] == '' ? 'checked="checked"' : ''); ?><?php echo $disabled; ?> /> <?php _e('No', 'rss_pi'); ?></label>
+								</li>
+							</ul>
+						</td> 
+					</tr>
+					<?php if ( isset($this->options['upgraded']['deleted_posts']) ) { ?>
+					<tr>
+						<td>
+							<?php _e('Purge deleted posts cache', "rss_pi"); ?>
+							<p class="description"><?php _e('This option will allow you to reset the deleted posts cache and re-import posts you have deleted in the past.', "rss_pi"); ?></p>
+						</td>
+						<td>
+							<?php
+							$disabled = '';
+							if (!$this->is_key_valid) {
+								$disabled = ' disabled="disabled"';
+								$this->key_error( sprintf( $this->key_prompt, '', 'http://www.feedsapi.com/?utm_source=rsspostimporter&utm_medium=upgrade&utm_term=purge-deleted-cache&utm_content=rsspi-full-rss-key-here&utm_campaign=wordpress' ), true );
+							}
+							?>
+							<?php $rss_pi_deleted_posts = count( get_option( 'rss_pi_deleted_posts', array() ) ); ?>
+							<p><?php printf( _n('Cached: <strong>%d</strong> deleted post', 'Cached: <strong>%d</strong> deleted posts', $rss_pi_deleted_posts, 'rss_pi'), $rss_pi_deleted_posts ); ?></p>
+							<input type="submit" value="Purge Cache" name="purge_deleted_cache" class="button button-primary button-large"<?php echo $disabled; ?> />     
+						</td> 
+					</tr>
+					<?php } ?>
+					<tr>
+						<td>
+							<?php _e('Export and backup your Feeds and setting as CSV File', "rss_pi"); ?>
+							<p class="description"><?php _e('This option will help you download a csv file with all your feeds setting , you can upload it back later.', "rss_pi"); ?></p>
+						</td>
+						<td>
 						<?php
-					}
-					?>
+						$disabled = '';
+						if (!$this->is_key_valid) {
+							$disabled = ' disabled="disabled"';
+							$this->key_error( sprintf( $this->key_prompt, '', 'http://www.feedsapi.com/?utm_source=rsspostimporter&utm_medium=upgrade&utm_term=export-feeds&utm_content=rsspi-full-rss-key-here&utm_campaign=wordpress' ), true );
+						}
+						?>
+							<input type="submit" value="Export your Feeds and Setting as CSV File" name="csv_download" class="button button-primary button-large"<?php echo $disabled; ?> />     
+						</td> 
+
+					</tr>
+					<tr>
+						<td>
+							<?php _e('Import your CSV file with your feeds\' settings', "rss_pi"); ?>
+							<p class="description"><?php _e('Create and Import a CSV file with your Feeds\' Setting with the following Structure and heading:<br/>
+<br/>
+url , name, max_posts, author_id, category_id, tags, keywords, strip_html<br/>
+<br/>
+url = your feed url<br/>
+name = the name you gives to your feed<br/>
+max_posts = the number of posts to simultaneously import<br/>
+author_id = your author ID, this is a number<br/>
+category_id = the Category IDs - number(s) separated with comma (,)<br/>
+tags = the Tag IDs - number(s) separated with comma (,)<br/>
+keywords = the filter keywords - string(s) separated with comma (,)<br/>
+strip_html = strip html tags - "true" or "false"', "rss_pi"); ?></p>
+						</td>
+						<td>
+						<?php
+						$disabled = '';
+						if (!$this->is_key_valid) {
+							$disabled = ' disabled="disabled"';
+//								$this->key_error($this->key_prompt, true);
+							$this->key_error( sprintf( $this->key_prompt, '', 'http://www.feedsapi.com/?utm_source=rsspostimporter&utm_medium=upgrade&utm_term=import-feeds&utm_content=rsspi-full-rss-key-here&utm_campaign=wordpress' ), true );
+						}
+						?>
+							<input type="file" name="import_csv"<?php echo $disabled; ?> />
+						</td> 
+					</tr>
 				</table>
 			</td>
 		</tr>
